@@ -1,0 +1,4 @@
+CREATE TABLE sectors(
+    id_sector INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    sector_name VARCHAR(60) NOT NULL UNIQUE
+);
