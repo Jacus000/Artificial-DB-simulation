@@ -1,0 +1,18 @@
+# Edytory (PyCharm i VS Code)
+.idea/
+.vscode/
+
+# Środowiska wirtualne
+.venv/
+venv/
+env/
+
+# Systemowe (Mac i Windows)
+.DS_Store
+Thumbs.db
+
+# Pythonowe śmieci
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
