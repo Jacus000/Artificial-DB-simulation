@@ -94,8 +94,16 @@ def pesel_generator(data):
     data["PESEL"] = data["gender"].apply(lambda gender: get_random_pesel(gender))
     return data
 
-
 # korzystajac z adresy.csv wybeiramy losowo wiersze bez powtorek (maks 310)
 def address_generator(n, data=load_data(['adresy.csv'])):
     return data[0].sample(n=n, replace=False).reset_index(drop=True)
+
+
+# inna wersja z losowaniem ulicy i numerow_domow
+def address_generator2(n, data=(load_data(['adresy.csv'])).pop()):
+    streets = data["ulica"].unique()
+    data = data.sample(n=n, replace=False).reset_index(drop=True)
+    data["ulica"] = np.random.choice(streets, size=n)
+    data["numer_domu"] = np.random.choice(list(range(1, 200)), size=n)
+    return data
 
