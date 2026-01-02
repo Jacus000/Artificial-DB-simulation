@@ -17,11 +17,13 @@ def phone_number_generator(n):
 
     return phone_numbers
 
-# losowanie z rozkladu dyskretnego uwzgledniajac wagi
+
+# Losowanie z rozkladu dyskretnego uwzgledniajac wagi
 def get_random(names, weights, n):
     return np.random.choice(names, size=n, p=weights)
 
-# generowanie losowych par, imion i nazwisk
+
+# Generowanie losowych par, imion i nazwisk
 def names_surenames_generator(n, data=load_data(['imiona_meskie.csv', 'imiona_zenskie.csv', 'nazwiska_meskie.csv', 'nazwiska_zenskie.csv'])):
     male_names, female_names, male_surenames, female_surenames = data
 
@@ -47,7 +49,7 @@ def names_surenames_generator(n, data=load_data(['imiona_meskie.csv', 'imiona_ze
     return people
 
 
-# generator maili na podstawie imion i nazwisk
+# Generator maili na podstawie imion i nazwisk
 def email_generator(people):
     def remove_accents(text):
         text = text.replace('ł', 'l').replace('Ł', 'L')
@@ -83,14 +85,17 @@ def get_random_pesel(gender):
     weight = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3]
     summ = sum(int(x) * w for x, w in zip(pesel_raw, weight))
     control_number = (10 - (summ % 10)) % 10
-
     return pesel_raw + str(control_number)
 
 
-# generuje unikaowe pesele dla osob wzgledem df
-# istnieje bardzo mala szansa, ze beda dwa uniaktowe ale mozna to latwo sprawdzic
+# Generuje unikatowe pesele dla osob wzgledem df, istnieje bardzo mala szansa, ze pesel nie uniaktowe ale mozna to latwo sprawdzic
+# zwraca data frame uzupelniony o PESEL
 def pesel_generator(data):
     data["PESEL"] = data["gender"].apply(lambda gender: get_random_pesel(gender))
     return data
 
+
+# korzystajac z adresy.csv wybeiramy losowo wiersze bez powtorek (maks 310)
+def address_generator(n, data=load_data(['adresy.csv'])):
+    return data[0].sample(n=n, replace=False).reset_index(drop=True)
 
