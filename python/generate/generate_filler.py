@@ -2,7 +2,7 @@ import pandas as pd
 import random
 import numpy as np
 from data.data_loader import load_names_surenames
-
+import unicodedata
 
 # Phones numbers generator
 def phone_number_generator(n):
@@ -45,4 +45,23 @@ def names_surenames_generator(n, data=load_names_surenames()):
     people = pd.concat([men, women]).sample(frac=1).reset_index(drop=True)
 
     return people
+
+
+
+def email_generator(people):
+    def remove_accents(text):
+        text = text.replace('ł', 'l').replace('Ł', 'L')
+        text = unicodedata.normalize('NFD', text)
+        ascii_text = text.encode('ascii', 'ignore')
+        return ascii_text.decode('utf-8')
+
+    def domain_generator():
+        domain = ["@gmail.com", "@outlook.com", "@icloud.com",
+                  "@yahoo.com", "@wp.pl", "@onet.pl", "@interia.pl"]
+        return random.choice(domain)
+
+    people["email"] = (people["name"] + people["last_name"]).apply(lambda mail: (remove_accents(mail).lower() + domain_generator()))
+    return people
+
+
 
