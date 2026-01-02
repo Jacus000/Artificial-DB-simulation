@@ -1,8 +1,9 @@
 import pandas as pd
 import random
 import numpy as np
-from data.data_loader import load_names_surenames
+from data.data_loader import load_data
 import unicodedata
+import re
 
 # Phones numbers generator
 def phone_number_generator(n):
@@ -16,13 +17,12 @@ def phone_number_generator(n):
 
     return phone_numbers
 
-
 # losowanie z rozkladu dyskretnego uwzgledniajac wagi
 def get_random(names, weights, n):
     return np.random.choice(names, size=n, p=weights)
 
 # generowanie losowych par, imion i nazwisk
-def names_surenames_generator(n, data=load_names_surenames()):
+def names_surenames_generator(n, data=load_data(['imiona_meskie.csv', 'imiona_zenskie.csv', 'nazwiska_meskie.csv', 'nazwiska_zenskie.csv'])):
     male_names, female_names, male_surenames, female_surenames = data
 
     # wagi
@@ -47,7 +47,7 @@ def names_surenames_generator(n, data=load_names_surenames()):
     return people
 
 
-
+# generator maili
 def email_generator(people):
     def remove_accents(text):
         text = text.replace('ł', 'l').replace('Ł', 'L')
@@ -55,13 +55,16 @@ def email_generator(people):
         ascii_text = text.encode('ascii', 'ignore')
         return ascii_text.decode('utf-8')
 
+    # usuwa spacje i znaki specjalne
+    def remove_spec_chars(text):
+        return "".join(re.sub(r'[^a-zA-Z0-9 ]', '', text).split())
+
     def domain_generator():
         domain = ["@gmail.com", "@outlook.com", "@icloud.com",
                   "@yahoo.com", "@wp.pl", "@onet.pl", "@interia.pl"]
         return random.choice(domain)
 
-    people["email"] = (people["name"] + people["last_name"]).apply(lambda mail: (remove_accents(mail).lower() + domain_generator()))
+    people["email"] = (people["name"] + people["last_name"]).apply(lambda mail: (remove_spec_chars(remove_accents(mail).lower()) + domain_generator()))
     return people
-
 
 
