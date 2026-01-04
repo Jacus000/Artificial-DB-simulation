@@ -1,25 +1,33 @@
+from sqlalchemy import create_engine
 import mysql.connector
-from mysql.connector import Error
-import pandas as pd
-import numpy as np
+import urllib.parse
+import os
+
+# Warto by było stworzyć .env żeby nie było widać danych logowania w kodzie po push na github
+
+# Łączność z serwerem i bazą
+def get_db_config():
+    # host = os.environ.get("DB_HOST")
+    # user = os.environ.get("DB_USER")
+    # password = os.environ.get("DB_PASSWORD")
+    # database = os.environ.get("DB_DATABASE")
+    return "giniewicz.it", "team05", "te@mzos" ,"team05"
 
 
-# Łącznie z bazą danych
+# Łączenie z serwerem i bazą do współpracy z Pandasem (w taki sposób łatwiej niż przez cursor)
+def get_engine():
+    host, user, password, database = get_db_config()
+    password = urllib.parse.quote_plus(password)
+    url = (f"mysql+mysqlconnector://{user}:{password}@{host}/{database}")
+    return create_engine(url, pool_recycle=3600)
+
+
+# Łączenie pod cursor i query
 def get_connection():
-    try:
-        conn = mysql.connector.connect(
-            host="giniewicz.it",
-            user="team05",
-            password="te@mzos",
-            database="team05",
-            port=3306
-        )
-        if conn.is_connected():
-            return conn
-
-    except Error as e:
-        print(f"Błąd podczas łączenia z bazą danych: {e}")
-        return None
-
-
-
+    host, user, password, database = get_db_config()
+    return mysql.connector.connect(
+        host=host,
+        user=user,
+        password=password,
+        database=database
+    )
