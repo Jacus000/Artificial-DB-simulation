@@ -1,1 +1,0 @@
-SELECT * FROM test_workers_pd;
