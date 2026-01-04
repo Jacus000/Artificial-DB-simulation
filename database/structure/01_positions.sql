@@ -4,6 +4,6 @@ CREATE TABLE positions(
     id_sector INT UNSIGNED NOT NULL,
 
     CONSTRAINT fk_workers_sector
-        FOREIGN KEY id_sector
+        FOREIGN KEY (id_sector)
         REFERENCES sectors(id_sector)
 );
