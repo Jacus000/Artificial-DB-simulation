@@ -1,0 +1,912 @@
+miasto,numer_pocztowy,ulica,numer_domu
+Warszawa,00-124,Marszałkowska,12
+Kraków,31-015,Floriańska,5
+Łódź,90-002,Piotrkowska,142
+Wrocław,50-010,Świdnicka,22
+Poznań,61-831,Święty Marcin,45
+Gdańsk,80-831,Długa,12
+Szczecin,70-412,Wojska Polskiego,8
+Bydgoszcz,85-005,Gdańska,31
+Lublin,20-002,Krakowskie Przedmieście,54
+Białystok,15-424,Lipowa,10
+Katowice,40-001,Korfantego,3
+Gdynia,81-350,Świętojańska,11
+Częstochowa,42-200,Aleja Najświętszej Maryi Panny,42
+Radom,26-600,Żeromskiego,15
+Sosnowiec,41-200,3 Maja,2
+Toruń,87-100,Szeroka,21
+Kielce,25-001,Sienkiewicza,33
+Rzeszów,35-001,Kościuszki,4
+Gliwice,44-100,Zwycięstwa,18
+Zabrze,41-800,Wolności,124
+Olsztyn,10-001,Prosta,5
+Bielsko-Biała,43-300,11 Listopada,28
+Bytom,41-900,Dworcowa,10
+Ruda Śląska,41-700,Niedurnego,44
+Rybnik,44-200,Sobieskiego,2
+Tychy,43-100,Bielska,15
+Gorzów Wielkopolski,66-400,Sikorskiego,12
+Elbląg,82-300,Stary Rynek,4
+Płock,09-400,Tumska,8
+Opole,45-001,Krakowska,22
+Warszawa,02-512,Puławska,122
+Kraków,30-033,Królewska,15
+Łódź,91-415,Zgierska,88
+Wrocław,53-601,Legnicka,102
+Poznań,60-101,Głogowska,12
+Gdańsk,80-210,Grunwaldzka,45
+Szczecin,71-124,Krzywoustego,3
+Bydgoszcz,85-644,Fordańska,112
+Lublin,20-400,Narutowicza,19
+Białystok,15-001,Sienkiewicza,4
+Katowice,40-123,Mariacka,1
+Gdynia,81-222,Morska,154
+Częstochowa,42-217,Dąbrowskiego,3
+Radom,26-610,Struga,42
+Sosnowiec,41-219,Gospodarcza,5
+Toruń,87-114,Grudziądzka,88
+Kielce,25-300,Warszawska,12
+Rzeszów,35-211,Piłsudskiego,33
+Gliwice,44-121,Pszczyńska,10
+Zabrze,41-806,Roosevelta,81
+Olsztyn,10-123,Pieniężnego,14
+Bielsko-Biała,43-309,Partyzantów,2
+Bytom,41-902,Jagiellońska,19
+Ruda Śląska,41-710,Kłodnicka,5
+Rybnik,44-210,Raciborska,12
+Tychy,43-110,Niepodległości,1
+Gorzów Wielkopolski,66-410,Chrobrego,22
+Elbląg,82-310,Grunwaldzka,122
+Płock,09-410,Wyszogrodzka,15
+Opole,45-124,Ozimska,44
+Warszawa,01-234,Górczewska,8
+Kraków,31-200,Opolska,12
+Łódź,92-101,Piłsudskiego,10
+Wrocław,51-114,Obornicka,3
+Poznań,61-124,Półwiejska,19
+Gdańsk,80-401,Hallera,122
+Szczecin,70-500,Wały Chrobrego,2
+Bydgoszcz,85-101,Jagiellońska,15
+Lublin,20-601,Filaretów,4
+Białystok,15-213,Mickiewicza,22
+Katowice,40-500,Kościuszki,122
+Gdynia,81-401,Zwycięstwa,8
+Częstochowa,42-202,Kopernika,15
+Radom,26-601,Chrobrego,33
+Sosnowiec,41-205,Piłsudskiego,12
+Toruń,87-101,Mickiewicza,54
+Kielce,25-501,Manifestu Lipcowego,10
+Rzeszów,35-010,Cieplińskiego,2
+Gliwice,44-102,Rynek,1
+Zabrze,41-801,3 Maja,15
+Olsztyn,10-501,Kościuszki,22
+Bielsko-Biała,43-301,Żywiecka,112
+Bytom,41-901,Wrocławska,45
+Ruda Śląska,41-701,1 Maja,102
+Rybnik,44-201,Kościuszki,12
+Tychy,43-101,Grota-Roweckiego,5
+Gorzów Wielkopolski,66-401,Piłsudskiego,3
+Elbląg,82-301,Królewiecka,19
+Płock,09-401,Królewiecka,44
+Opole,45-050,Reymonta,8
+Wałbrzych,58-300,Główna,15
+Zielona Góra,65-001,Westerplatte,2
+Tarnów,33-100,Krakowska,122
+Chorzów,41-500,Wolności,88
+Koszalin,75-001,Zwycięstwa,10
+Legnica,59-220,Najświętszej Marii Panny,3
+Grudziądz,86-300,Pańska,15
+Słupsk,76-200,Wojska Polskiego,1
+Jaworzno,43-600,Grunwaldzka,22
+Jastrzębie-Zdrój,44-330,Mazowiecka,10
+Jelenia Góra,58-500,Konopnickiej,4
+Nowy Sącz,33-300,Lwowska,54
+Konin,62-500,Dworcowa,12
+Piotrków Trybunalski,97-300,Słowackiego,8
+Inowrocław,88-100,Królowej Jadwigi,19
+Lubin,59-300,Odrodzenia,2
+Mysłowice,41-400,Pszczyńska,33
+Siedlce,08-110,Piłsudskiego,15
+Ostrowiec Świętokrzyski,27-400,Iłżecka,10
+Gniezno,62-200,Chrobrego,4
+Stargard,73-110,Piłsudskiego,22
+Siemianowice Śląskie,41-100,Świerczewskiego,8
+Suwałki,16-400,Kościuszki,154
+Głogów,67-200,Gwiaździsta,2
+Leszno,64-100,Wolności,3
+Pabianice,95-200,Zamkowa,45
+Zamość,22-400,Piłsudskiego,12
+Chełm,22-100,Lubelska,102
+Tomaszów Mazowiecki,97-200,św. Antoniego,5
+Stalowa Wola,37-450,Jana Pawła II,19
+Przemyśl,37-700,Franciszkańska,8
+Kędzierzyn-Koźle,47-200,Wojska Polskiego,12
+Łomża,18-400,Wojska Polskiego,33
+Żory,44-350,Kościuszki,2
+Bełchatów,97-400,Kościuszki,44
+Mielec,39-300,Mickiewicza,15
+Tarnowskie Góry,42-600,Krakowska,10
+Tczew,83-110,Gdańska,8
+Ełk,19-300,Wojska Polskiego,122
+Pruszków,05-800,Wojska Polskiego,3
+Stalowa Wola,37-450,Popiełuszki,15
+Rzeszów,35-002,Hetmańska,10
+Kraków,30-001,Lubicz,42
+Warszawa,00-500,Wiejska,1
+Łódź,90-100,Narutowicza,15
+Wrocław,50-100,Rynek,10
+Poznań,61-100,Wierzbięcice,33
+Gdańsk,80-100,Kartuska,112
+Szczecin,70-100,Mieszka I,5
+Bydgoszcz,85-100,Bernardyńska,12
+Lublin,20-100,Lubartowska,8
+Białystok,15-100,Warszawska,19
+Katowice,40-100,Chorzowska,102
+Gdynia,81-100,Jana z Kolna,2
+Częstochowa,42-100,Warszawska,15
+Radom,26-100,Kielecka,4
+Sosnowiec,41-100,Orla,33
+Toruń,87-100,Bydgoska,22
+Kielce,25-100,Krakowska,10
+Gliwice,44-100,Toszecka,8
+Zabrze,41-100,Gdańska,15
+Olsztyn,10-100,Warszawska,122
+Bielsko-Biała,43-100,Lwowska,3
+Bytom,41-100,Strzelców Bytomskich,5
+Ruda Śląska,41-100,Wolności,19
+Rybnik,44-100,Gliwicka,44
+Tychy,43-100,Katowicka,8
+Gorzów Wielkopolski,66-100,Warszawska,15
+Elbląg,82-100,Królewiecka,2
+Płock,09-100,Bielska,10
+Opole,45-100,Wrocławska,33
+Warszawa,01-100,Okopowa,12
+Kraków,31-100,Karmelicka,15
+Łódź,91-100,Limanowskiego,4
+Wrocław,52-100,Karkonoska,102
+Poznań,61-200,Zamenhofa,8
+Gdańsk,80-300,Wita Stwosza,19
+Szczecin,71-100,Mickiewicza,22
+Bydgoszcz,85-200,Nakielska,10
+Lublin,20-200,Mełgiewska,15
+Białystok,15-200,Kawaleryjska,3
+Katowice,40-200,1 Maja,122
+Gdynia,81-200,Chylońska,5
+Częstochowa,42-200,Jagiellońska,19
+Radom,26-200,Lubelska,44
+Sosnowiec,41-300,Braci Mieroszewskich,8
+Toruń,87-200,Lubicka,12
+Kielce,25-200,Sandomierska,15
+Rzeszów,35-200,Warszawska,2
+Gliwice,44-200,Rybnicka,102
+Zabrze,41-200,Bytomska,33
+Olsztyn,10-200,Wojska Polskiego,15
+Bielsko-Biała,43-200,Cieszyńska,10
+Bytom,41-200,Chorzowska,4
+Ruda Śląska,41-200,Kokota,22
+Rybnik,44-300,Wodzisławska,8
+Tychy,43-200,Oświęcimska,19
+Gorzów Wielkopolski,66-200,Myśliborska,12
+Elbląg,82-200,Bema,5
+Płock,09-200,Jachowicza,3
+Opole,45-200,Sosnkowskiego,44
+Warszawa,02-100,Grójecka,15
+Kraków,30-100,Armii Krajowej,112
+Łódź,92-100,Rokicińska,12
+Wrocław,53-100,Powstańców Śląskich,8
+Poznań,60-200,Grunwaldzka,102
+Gdańsk,80-400,Legionów,5
+Szczecin,70-200,Energetyków,15
+Bydgoszcz,85-300,Szubińska,33
+Lublin,20-300,Witosa,4
+Białystok,15-300,Wiejska,19
+Katowice,40-300,Roździeńskiego,22
+Gdynia,81-300,Władysława IV,8
+Częstochowa,42-300,Wojska Polskiego,15
+Radom,26-300,Warszawska,122
+Sosnowiec,41-400,Andersa,3
+Toruń,87-300,Szosa Chełmińska,10
+Kielce,25-300,Radomska,45
+Rzeszów,35-300,Rejtana,12
+Gliwice,44-300,Zwycięstwa,19
+Zabrze,41-300,Wolności,10
+Olsztyn,10-300,Tuwima,8
+Bielsko-Biała,43-300,Bystrzańska,15
+Bytom,41-300,Piekarska,4
+Ruda Śląska,41-300,Górnośląska,33
+Rybnik,44-400,Żorska,12
+Tychy,43-300,Armii Krajowej,22
+Gorzów Wielkopolski,66-300,Walczaka,5
+Elbląg,82-400,Mazurska,102
+Płock,09-300,Kilińskiego,8
+Opole,45-300,Plebiscytowa,15
+Warszawa,03-100,Targowa,12
+Kraków,31-200,29 Listopada,44
+Łódź,93-100,Rzgowska,8
+Wrocław,54-100,Kosmonautów,19
+Poznań,61-300,Hetmańska,102
+Gdańsk,80-500,Marynarki Polskiej,5
+Szczecin,71-200,Ku Słońcu,15
+Bydgoszcz,85-400,Grunwaldzka,33
+Lublin,20-400,Kunickiego,12
+Białystok,15-400,Zwycięstwa,4
+Katowice,40-400,Mikołowska,10
+Gdynia,81-400,Piłsudskiego,19
+Częstochowa,42-400,Okulickiego,122
+Radom,26-400,Słowackiego,8
+Sosnowiec,41-500,Baczyńskiego,15
+Toruń,87-400,Poznańska,3
+Kielce,25-400,Tarnowska,10
+Rzeszów,35-400,Lubelska,22
+Gliwice,44-400,Pszczyńska,45
+Zabrze,41-400,Matejki,12
+Olsztyn,10-400,Leonharda,19
+Bielsko-Biała,43-400,Grażyńskiego,8
+Bytom,41-400,Wrocławska,102
+Ruda Śląska,41-400,Chorzowska,5
+Rybnik,44-500,Mikołowska,15
+Tychy,43-400,Piłsudskiego,33
+Gorzów Wielkopolski,66-400,Poznańska,12
+Elbląg,82-500,Lotnicza,4
+Płock,09-400,Mickiewicza,15
+Opole,45-400,Budowlanych,10
+Warszawa,04-100,Grochowska,8
+Kraków,30-200,Królowej Jadwigi,19
+Łódź,94-100,Retkińska,122
+Wrocław,50-200,Pomorska,3
+Poznań,60-300,Bukowska,15
+Gdańsk,80-600,Sienna,44
+Szczecin,70-300,Jagiellońska,12
+Bydgoszcz,85-500,Gdańska,102
+Lublin,20-500,Jana Pawła II,8
+Białystok,15-500,Dojlidy Fabryczne,15
+Katowice,40-500,Ligocka,4
+Gdynia,81-500,Zwycięstwa,33
+Częstochowa,42-500,Roosevelta,12
+Radom,26-500,Wierzbicka,10
+Sosnowiec,41-600,Staszica,15
+Toruń,87-500,Polna,22
+Kielce,25-500,Piekoszowska,122
+Rzeszów,35-500,Krakowska,8
+Gliwice,44-500,Sikorskiego,15
+Zabrze,41-500,Wolności,10
+Olsztyn,10-500,Pstrowskiego,4
+Bielsko-Biała,43-500,Konopnickiej,19
+Bytom,41-500,Olimpijska,12
+Ruda Śląska,41-500,Bukowa,33
+Rybnik,44-600,Gliwicka,5
+Tychy,43-500,Dahliowa,12
+Gorzów Wielkopolski,66-500,Kostrzyńska,10
+Elbląg,82-600,Płk. Dąbka,15
+Płock,09-500,Kolejowa,19
+Opole,45-500,Oświęcimska,102
+Warszawa,00-200,Bonifraterska,12
+Kraków,31-300,Conrada,8
+Łódź,90-200,Jaracza,15
+Wrocław,51-200,Krzywoustego,44
+Poznań,61-400,28 Czerwca 1956 r.,10
+Gdańsk,80-700,Elbląska,122
+Szczecin,71-300,Łukasińskiego,3
+Bydgoszcz,85-600,Modrzewiowa,15
+Lublin,20-600,Zana,10
+Białystok,15-600,Popiełuszki,19
+Katowice,40-600,Francuska,33
+Gdynia,81-600,Małokacka,12
+Częstochowa,42-600,Barbary,8
+Radom,26-600,Mieszka I,15
+Sosnowiec,41-700,Wojska Polskiego,102
+Toruń,87-600,Konstytucji 3 Maja,5
+Kielce,25-600,Grunwaldzka,15
+Rzeszów,35-600,Lwowska,33
+Gliwice,44-600,Rybnicka,12
+Zabrze,41-600,Tarnopolska,8
+Olsztyn,10-600,Sikorskiego,15
+Bielsko-Biała,43-600,Wyzwolenia,4
+Bytom,41-600,Modrzewskiego,10
+Ruda Śląska,41-600,Radoszowska,122
+Rybnik,44-700,Energetyków,19
+Tychy,43-600,Beskidzka,5
+Gorzów Wielkopolski,66-600,Poznańska,10
+Elbląg,82-700,Ogólna,15
+Płock,09-600,Kutnowska,44
+Opole,45-600,Partyzancka,12
+Warszawa,01-401,Obozowa,15
+Kraków,30-011,Wrocławska,23
+Łódź,91-001,Zachodnia,12
+Wrocław,50-300,Szewska,5
+Poznań,61-701,Fredry,8
+Gdańsk,80-123,Słowackiego,44
+Szczecin,71-100,Witkiewicza,11
+Bydgoszcz,85-700,Fordońska,9
+Lublin,20-100,Głęboka,22
+Białystok,15-111,Ciołkowskiego,4
+Katowice,40-156,Sokolska,19
+Gdynia,81-519,Orłowska,3
+Częstochowa,42-200,Sobieskiego,55
+Radom,26-610,25 Czerwca,10
+Sosnowiec,41-219,Braci Mieroszewskich,41
+Toruń,87-100,Żółkiewskiego,8
+Kielce,25-312,Solidarności,17
+Rzeszów,35-300,Kopisto,2
+Gliwice,44-100,Dworcowa,66
+Zabrze,41-800,De Gaulle'a,14
+Olsztyn,10-600,Krasickiego,21
+Bielsko-Biała,43-300,Michałowicza,9
+Bytom,41-902,Witczaka,5
+Ruda Śląska,41-710,Bielszowicka,33
+Rybnik,44-200,Chrobrego,11
+Tychy,43-100,Budowlanych,88
+Gorzów Wielkopolski,66-400,Jagiełły,4
+Elbląg,82-300,12 Lutego,15
+Płock,09-402,Dobrzyńska,20
+Opole,45-001,Niemodlińska,50
+Wałbrzych,58-300,Armii Krajowej,7
+Zielona Góra,65-001,Batorego,12
+Tarnów,33-100,Słoneczna,9
+Chorzów,41-500,Katowicka,102
+Koszalin,75-001,Młyńska,3
+Legnica,59-220,Złotoryjska,18
+Grudziądz,86-300,Chełmińska,25
+Słupsk,76-200,Tuwima,8
+Jaworzno,43-600,Pocztowa,11
+Jastrzębie-Zdrój,44-330,Warszawska,6
+Jelenia Góra,58-500,Sudecka,22
+Nowy Sącz,33-300,Nawojowska,45
+Konin,62-500,Przemysłowa,31
+Piotrków Trybunalski,97-300,Łódzka,10
+Inowrocław,88-100,Poznańska,5
+Lubin,59-300,Niepodległości,14
+Mysłowice,41-400,Mikołowska,9
+Siedlce,08-110,3 Maja,12
+Ostrowiec Świętokrzyski,27-400,Siennieńska,20
+Gniezno,62-200,Witkowska,7
+Stargard,73-110,Szczecińska,33
+Siemianowice Śląskie,41-100,Bytkowska,4
+Suwałki,16-400,Noniewicza,16
+Głogów,67-200,Sikorskiego,9
+Leszno,64-100,Lipowa,22
+Pabianice,95-200,Partyzancka,5
+Zamość,22-400,Szczebrzeska,11
+Chełm,22-100,Rejowiecka,40
+Tomaszów Mazowiecki,97-200,Graniczna,3
+Stalowa Wola,37-450,Staszica,8
+Przemyśl,37-700,Słowackiego,15
+Kędzierzyn-Koźle,47-200,Kozielska,21
+Łomża,18-400,Szosa Zambrowska,7
+Żory,44-350,Wodzisławska,19
+Bełchatów,97-400,Lipowa,6
+Mielec,39-300,Sienkiewicza,30
+Tarnowskie Góry,42-600,Zagórska,12
+Tczew,83-110,Jagiellońska,4
+Ełk,19-300,Kilińskiego,9
+Pruszków,05-800,Kraszewskiego,11
+Warszawa,02-777,Indira Gandhi,15
+Kraków,31-548,Aleja Pokoju,44
+Łódź,93-333,Rzgowska,105
+Wrocław,53-609,Robotnicza,22
+Poznań,60-523,Dąbrowskiego,89
+Gdańsk,80-809,Długi Targ,1
+Szczecin,70-404,Niepodległości,18
+Bydgoszcz,85-809,Wojska Polskiego,5
+Lublin,20-601,Zana,13
+Białystok,15-001,Branickiego,17
+Katowice,40-086,3 Maja,29
+Gdynia,81-341,Węglowa,3
+Częstochowa,42-202,Śląska,12
+Radom,26-600,Traugutta,9
+Sosnowiec,41-200,Małachowskiego,5
+Toruń,87-100,Odrodzenia,14
+Kielce,25-516,Paderewskiego,33
+Rzeszów,35-010,Dąbrowskiego,8
+Gliwice,44-102,Zwycięstwa,21
+Zabrze,41-803,Szczęść Boże,6
+Olsztyn,10-539,Dworcowa,45
+Bielsko-Biała,43-300,Zamkowa,10
+Bytom,41-902,Piekarska,16
+Ruda Śląska,41-709,Pokoju,2
+Rybnik,44-203,Wiejska,7
+Tychy,43-100,Grota-Roweckiego,55
+Gorzów Wielkopolski,66-400,Mieszka I,12
+Elbląg,82-300,Hetmańska,4
+Płock,09-402,Kolegialna,9
+Opole,45-052,Oleska,31
+Wałbrzych,58-306,Wrocławska,19
+Zielona Góra,65-021,Kupiecka,5
+Tarnów,33-100,Mickiewicza,27
+Chorzów,41-506,Dąbrowskiego,11
+Koszalin,75-452,Gnieźnieńska,8
+Legnica,59-220,Jaworzyńska,66
+Grudziądz,86-300,Legionów,3
+Słupsk,76-200,Szczecińska,14
+Jaworzno,43-603,Leopolda,9
+Jastrzębie-Zdrój,44-335,Pszczyńska,20
+Jelenia Góra,58-506,Wolności,42
+Nowy Sącz,33-300,Jagiellońska,7
+Konin,62-510,Aleje 1 Maja,15
+Piotrków Trybunalski,97-300,Sienkiewicza,38
+Inowrocław,88-100,Dworcowa,6
+Lubin,59-300,Ścinawska,12
+Mysłowice,41-400,Oświęcimska,25
+Siedlce,08-110,Warszawska,9
+Ostrowiec Świętokrzyski,27-400,Radwana,14
+Gniezno,62-200,Mieszka I,5
+Stargard,73-110,Bydgoska,11
+Siemianowice Śląskie,41-103,Michałkowicka,22
+Suwałki,16-400,Utrata,8
+Głogów,67-200,Wojska Polskiego,30
+Leszno,64-100,Poznańska,16
+Pabianice,95-200,Kilińskiego,7
+Zamość,22-400,Lwowska,19
+Chełm,22-100,Hrubieszowska,3
+Tomaszów Mazowiecki,97-200,Mościckiego,12
+Stalowa Wola,37-450,Mickiewicza,5
+Przemyśl,37-700,3 Maja,10
+Kędzierzyn-Koźle,47-220,Gliwicka,4
+Łomża,18-400,Piłsudskiego,33
+Żory,44-350,Mikołowska,8
+Bełchatów,97-400,Czapliniecka,15
+Mielec,39-300,Niepodległości,21
+Tarnowskie Góry,42-600,Piłsudskiego,6
+Tczew,83-110,Wojska Polskiego,9
+Ełk,19-300,Mickiewicza,14
+Pruszków,05-800,Prusa,5
+Warszawa,01-864,Broniewskiego,44
+Kraków,30-348,Kapelanka,12
+Łódź,91-341,Lutomierska,25
+Wrocław,54-130,Lotnicza,8
+Poznań,61-131,Zamenhofa,3
+Gdańsk,80-354,Chłopska,16
+Szczecin,70-781,Struga,29
+Bydgoszcz,85-825,Kujawska,7
+Lublin,20-209,Mełgiewska,100
+Białystok,15-274,Waszyngtona,11
+Katowice,40-860,Gliwicka,55
+Gdynia,81-451,Aleja Zwycięstwa,20
+Częstochowa,42-218,Bór,8
+Radom,26-600,Limanowskiego,14
+Sosnowiec,41-200,Będzińska,6
+Toruń,87-100,Szosa Lubicka,32
+Kielce,25-520,Zagnańska,9
+Rzeszów,35-060,Targowa,4
+Gliwice,44-105,Pszczyńska,50
+Zabrze,41-800,Wolności,200
+Olsztyn,10-687,Wilczyńskiego,15
+Bielsko-Biała,43-300,Lwowska,12
+Bytom,41-902,Jainty,3
+Ruda Śląska,41-700,Wolności,15
+Rybnik,44-217,Kotucza,8
+Tychy,43-100,Niepodległości,22
+Gorzów Wielkopolski,66-400,Walczaka,7
+Elbląg,82-300,Nowowiejska,11
+Płock,09-400,Sienkiewicza,19
+Opole,45-064,Kołłątaja,4
+Wałbrzych,58-300,Mickiewicza,35
+Zielona Góra,65-018,Wyszyńskiego,9
+Tarnów,33-100,Starodąbrowska,5
+Chorzów,41-500,Armii Krajowej,22
+Koszalin,75-201,Władysława IV,13
+Legnica,59-220,Piastowska,8
+Grudziądz,86-300,Hallera,16
+Słupsk,76-200,Grodzka,2
+Jaworzno,43-600,Sienkiewicza,33
+Jastrzębie-Zdrój,44-330,Cieszyńska,10
+Jelenia Góra,58-500,1 Maja,55
+Nowy Sącz,33-300,Węgierska,12
+Konin,62-510,Spółdzielców,4
+Piotrków Trybunalski,97-300,Wojska Polskiego,77
+Inowrocław,88-100,Toruńska,9
+Lubin,59-300,Marii Skłodowskiej-Curie,15
+Mysłowice,41-400,Krakowska,28
+Siedlce,08-110,Sokołowska,6
+Ostrowiec Świętokrzyski,27-400,Jana Pawła II,11
+Gniezno,62-200,Warszawska,3
+Stargard,73-110,Chrobrego,22
+Siemianowice Śląskie,41-100,Wróblewskiego,5
+Suwałki,16-400,Kowalskiego,19
+Głogów,67-200,Obozowa,8
+Leszno,64-100,Konstytucji 3 Maja,10
+Pabianice,95-200,Jana Pawła II,14
+Zamość,22-400,Lubelska,5
+Chełm,22-100,Lwowska,2
+Tomaszów Mazowiecki,97-200,Warszawska,30
+Stalowa Wola,37-450,Poniatowskiego,7
+Przemyśl,37-700,Jagiellońska,12
+Kędzierzyn-Koźle,47-224,Piastowska,9
+Łomża,18-400,Zawadzka,16
+Żory,44-350,Aleja Zjednoczonej Europy,5
+Bełchatów,97-400,Staszica,21
+Mielec,39-300,Wyszyńskiego,4
+Tarnowskie Góry,42-600,Bytomska,11
+Tczew,83-110,Armii Krajowej,3
+Ełk,19-300,Piłsudskiego,15
+Pruszków,05-800,Ołówkowa,8
+Warszawa,03-982,Fieldorfa,12
+Kraków,30-733,Lipska,33
+Łódź,90-552,Kopernika,44
+Wrocław,50-540,Armii Krajowej,61
+Poznań,61-695,Lechicka,19
+Gdańsk,80-463,Kołobrzeska,8
+Szczecin,71-699,Obotrycka,5
+Bydgoszcz,85-796,Akademicka,22
+Lublin,20-538,Filaretów,30
+Białystok,15-688,Wysoki Stoczek,14
+Katowice,40-832,Bocheńskiego,9
+Gdynia,81-155,Płk. Dąbka,11
+Częstochowa,42-200,Armii Krajowej,66
+Radom,26-600,Żwirki i Wigury,7
+Sosnowiec,41-216,Długosza,4
+Toruń,87-100,Grudziądzka,50
+Kielce,25-406,Bohaterów Warszawy,2
+Rzeszów,35-111,Batalionów Chłopskich,15
+Gliwice,44-117,Toszecka,31
+Zabrze,41-813,Jordana,8
+Olsztyn,10-444,Kołobrzeska,12
+Bielsko-Biała,43-300,Partyzantów,6
+Bytom,41-902,Konstytucji,9
+Ruda Śląska,41-706,Kłodnicka,18
+Rybnik,44-200,Powstańców Śląskich,25
+Tychy,43-100,Sikorskiego,10
+Gorzów Wielkopolski,66-400,Szczecińska,5
+Elbląg,82-300,Rycerska,3
+Płock,09-402,Wyszogrodzka,44
+Opole,45-273,Sosnkowskiego,19
+Wałbrzych,58-304,Piłsudskiego,2
+Zielona Góra,65-427,Sienkiewicza,11
+Tarnów,33-100,Lwowska,35
+Chorzów,41-500,Powstańców,8
+Koszalin,75-604,Zwycięstwa,100
+Legnica,59-220,Chojnowska,22
+Grudziądz,86-300,Włodka,4
+Słupsk,76-200,Sobieskiego,9
+Jaworzno,43-600,Szczakowska,15
+Jastrzębie-Zdrój,44-335,11 Listopada,6
+Jelenia Góra,58-500,Wincentego Pola,12
+Nowy Sącz,33-300,Królowej Jadwigi,3
+Konin,62-510,Chopina,8
+Piotrków Trybunalski,97-300,Słowackiego,55
+Inowrocław,88-100,Świętokrzyska,4
+Lubin,59-300,Kilińskiego,10
+Mysłowice,41-400,Katowicka,16
+Siedlce,08-110,Mireckiego,7
+Ostrowiec Świętokrzyski,27-400,Polna,9
+Gniezno,62-200,Roosevelta,22
+Stargard,73-110,Mickiewicza,5
+Siemianowice Śląskie,41-100,Olimpijska,3
+Suwałki,16-400,Reja,14
+Głogów,67-200,Kopernika,8
+Leszno,64-100,Kąkolewska,21
+Pabianice,95-200,Moniuszki,6
+Zamość,22-400,Przemysłowa,10
+Chełm,22-100,Szwoleżerów,2
+Tomaszów Mazowiecki,97-200,Polna,15
+Stalowa Wola,37-450,Okulickiego,9
+Przemyśl,37-700,Borelowskiego,11
+Kędzierzyn-Koźle,47-232,Jana Pawła II,18
+Łomża,18-400,Sikorskiego,22
+Żory,44-350,Osińska,7
+Bełchatów,97-400,Piłsudskiego,30
+Mielec,39-300,Kusocińskiego,3
+Tarnowskie Góry,42-600,Opolska,5
+Tczew,83-110,30 Stycznia,12
+Ełk,19-300,Armii Krajowej,4
+Pruszków,05-800,Bolesława Prusa,19
+Warszawa,04-628,Kajki,9
+Kraków,30-415,Wadowicka,5
+Łódź,94-042,Wyszyńskiego,40
+Wrocław,51-124,Kamieńskiego,11
+Poznań,61-823,Piekary,13
+Gdańsk,80-286,Jaśkowa Dolina,22
+Szczecin,71-450,Chopina,8
+Bydgoszcz,85-444,Grunwaldzka,150
+Lublin,20-850,Koncertowa,4
+Białystok,15-351,Wiejska,55
+Warszawa,02-981,Augustówka,15
+Kraków,30-698,Kosocicka,4
+Łódź,91-490,Sasanek,12
+Wrocław,54-612,Graniczna,101
+Poznań,61-312,Szczepankowo,33
+Gdańsk,80-180,Świętokrzyska,55
+Szczecin,70-784,Zwierzyniecka,9
+Bydgoszcz,85-453,Siedlecka,14
+Lublin,20-810,Sławinkowska,22
+Białystok,15-523,Zaściańska,7
+Katowice,40-750,Panewnicka,90
+Gdynia,81-571,Chwaszczyńska,18
+Częstochowa,42-209,Malownicza,3
+Radom,26-604,Kozienicka,51
+Sosnowiec,41-218,Kalinowa,8
+Toruń,87-100,Lisia,2
+Kielce,25-145,Ściegiennego,120
+Rzeszów,35-604,Budziwojska,44
+Gliwice,44-164,Kozielska,200
+Zabrze,41-808,Hagera,11
+Olsztyn,10-699,Hozjusza,5
+Bielsko-Biała,43-316,Karpacka,88
+Bytom,41-923,Strzelców Bytomskich,150
+Ruda Śląska,41-711,Halembska,9
+Rybnik,44-251,Górnośląska,14
+Tychy,43-100,Tyska,2
+Gorzów Wielkopolski,66-400,Żwirowa,31
+Elbląg,82-300,Dębowa,16
+Płock,09-409,Góry,25
+Opole,45-758,Prószkowska,99
+Wałbrzych,58-309,Długa,10
+Zielona Góra,65-120,Botaniczna,7
+Tarnów,33-101,Klikowska,42
+Chorzów,41-503,Gwarecka,5
+Koszalin,75-816,Morska,102
+Legnica,59-220,Rzeczypospolitej,19
+Grudziądz,86-300,Paderewskiego,4
+Słupsk,76-200,Garncarska,11
+Jaworzno,43-600,Krakowska,85
+Jastrzębie-Zdrój,44-330,Zdrojowa,3
+Jelenia Góra,58-500,Cieplicka,28
+Nowy Sącz,33-300,Tarnowska,50
+Konin,62-500,Kleczewska,15
+Piotrków Trybunalski,97-300,Sulejowska,60
+Inowrocław,88-100,Jacewska,9
+Lubin,59-300,Hutnicza,100
+Mysłowice,41-400,Brzezińska,12
+Siedlce,08-110,Brzeska,44
+Ostrowiec Świętokrzyski,27-400,Bałtowska,19
+Gniezno,62-200,Wrzesińska,33
+Stargard,73-110,Gdańska,8
+Siemianowice Śląskie,41-100,Krupanka,21
+Suwałki,16-400,Północna,5
+Głogów,67-200,Orbitalna,12
+Leszno,64-100,Osiecka,4
+Pabianice,95-200,Lutomierska,15
+Zamość,22-400,Hrubieszowska,30
+Chełm,22-100,Rampa Brzeska,2
+Tomaszów Mazowiecki,97-200,Opoczyńska,11
+Stalowa Wola,37-450,Energetyków,9
+Przemyśl,37-700,Lwowska,55
+Kędzierzyn-Koźle,47-200,Przyjaźni,8
+Łomża,18-400,Nowogrodzka,22
+Żory,44-350,Pszczyńska,10
+Bełchatów,97-400,Włókniarzy,4
+Mielec,39-300,Przemysłowa,60
+Tarnowskie Góry,42-600,Gliwicka,25
+Tczew,83-110,Bałdowska,7
+Ełk,19-300,Grajewska,12
+Pruszków,05-800,Działkowa,3
+Warszawa,05-077,Trakt Brzeski,112
+Kraków,31-982,Igołomska,15
+Łódź,91-610,Strykowska,80
+Wrocław,52-200,Zwycięska,9
+Poznań,61-001,Warszawska,66
+Gdańsk,80-176,Przywidzka,10
+Szczecin,70-800,Przestrzenna,4
+Bydgoszcz,85-301,Nakielska,200
+Lublin,20-447,Abramowicka,5
+Białystok,15-694,Plażowa,1
+Katowice,40-423,Szopienicka,12
+Gdynia,81-001,Hutnicza,22
+Częstochowa,42-200,Wręczycka,14
+Radom,26-600,Słowackiego,99
+Sosnowiec,41-200,Lenartowicza,7
+Toruń,87-100,Olsztyńska,40
+Kielce,25-650,Łódzka,100
+Rzeszów,35-322,Podwisłocze,33
+Gliwice,44-100,Tarnogórska,18
+Zabrze,41-800,Buchenwaldczyków,5
+Olsztyn,10-683,Wańkowicza,9
+Bielsko-Biała,43-300,Krakowska,202
+Bytom,41-902,Łagiewnicka,12
+Ruda Śląska,41-700,Oświęcimska,6
+Rybnik,44-200,Prosta,11
+Tychy,43-100,Oświęcimska,150
+Gorzów Wielkopolski,66-400,Kasprzaka,2
+Elbląg,82-300,Fromborska,19
+Płock,09-400,Targowa,8
+Opole,45-001,Nysy Łużyckiej,4
+Wałbrzych,58-300,Niepodległości,15
+Zielona Góra,65-001,Dąbrówki,6
+Tarnów,33-100,Mościckiego,55
+Chorzów,41-500,Stefada Batorego,10
+Koszalin,75-001,Fałata,7
+Legnica,59-220,Wrocławska,120
+Grudziądz,86-300,Kalinkowa,5
+Słupsk,76-200,Hubalczyków,9
+Jaworzno,43-600,Dąbrowskiego,16
+Jastrzębie-Zdrój,44-330,Wielkopolska,33
+Jelenia Góra,58-500,Złotnicza,2
+Nowy Sącz,33-300,Zielona,11
+Konin,62-500,Zakładowa,4
+Piotrków Trybunalski,97-300,Wolborska,15
+Inowrocław,88-100,Solankowa,8
+Lubin,59-300,Legnicka,12
+Mysłowice,41-400,Górnicza,4
+Siedlce,08-110,Starowiejska,20
+Ostrowiec Świętokrzyski,27-400,Sandomierska,5
+Gniezno,62-200,Poznańska,100
+Stargard,73-110,Kościuszki,9
+Siemianowice Śląskie,41-100,Wiejska,12
+Suwałki,16-400,Sejneńska,33
+Głogów,67-200,Sikorskiego,50
+Leszno,64-100,17 Stycznia,8
+Pabianice,95-200,Wiejska,5
+Zamość,22-400,Szczebrzeska,12
+Chełm,22-100,Okszowska,7
+Tomaszów Mazowiecki,97-200,Spalska,2
+Stalowa Wola,37-450,Solidarności,10
+Przemyśl,37-700,Grunwaldzka,15
+Kędzierzyn-Koźle,47-200,Wyspa,3
+Łomża,18-400,Poznańska,11
+Żory,44-350,Rybnicka,22
+Bełchatów,97-400,Czyżewskiego,6
+Mielec,39-300,Legionów,9
+Tarnowskie Góry,42-600,Częstochowska,4
+Tczew,83-110,Malinowska,8
+Ełk,19-300,Suwalska,15
+Pruszków,05-800,3 Maja,100
+Warszawa,04-700,Czołowa,3
+Kraków,30-222,Królowej Jadwigi,200
+Łódź,90-001,Sienkiewicza,99
+Wrocław,50-100,Oławska,2
+Poznań,61-800,Św. Marcin,50
+Gdańsk,80-100,Długie Ogrody,12
+Szczecin,71-500,Duńska,8
+Bydgoszcz,85-100,Śniadeckich,5
+Lublin,20-100,Narutowicza,55
+Białystok,15-100,Lipowa,30
+Katowice,40-001,Wita Stwosza,9
+Gdynia,81-300,Świętojańska,90
+Częstochowa,42-200,Nowowiejskiego,12
+Radom,26-600,Moniuszki,4
+Sosnowiec,41-200,Modrzejowska,15
+Toruń,87-100,Kr. Jadwigi,7
+Kielce,25-300,Wesoła,19
+Rzeszów,35-001,3 Maja,22
+Gliwice,44-100,Zwycięstwa,40
+Zabrze,41-800,Powstańców Śląskich,8
+Olsztyn,10-100,Prosta,11
+Bielsko-Biała,43-300,11 Listopada,50
+Bytom,41-900,Dworcowa,15
+Ruda Śląska,41-700,Plac Jana Pawła II,1
+Rybnik,44-200,Sobieskiego,18
+Tychy,43-100,Biblioteczna,3
+Gorzów Wielkopolski,66-400,Sikorskiego,44
+Elbląg,82-300,1 Maja,12
+Płock,09-400,Tumska,15
+Opole,45-001,Krakowska,35
+Wałbrzych,58-300,Słowackiego,9
+Zielona Góra,65-001,Jedności,5
+Tarnów,33-100,Wałowa,8
+Chorzów,41-500,Jagiellońska,12
+Koszalin,75-001,Zwycięstwa,50
+Legnica,59-220,Najświętszej Marii Panny,15
+Grudziądz,86-300,Mickiewicza,20
+Słupsk,76-200,Wojska Polskiego,55
+Jaworzno,43-600,Mickiewicza,8
+Jastrzębie-Zdrój,44-330,1 Maja,4
+Jelenia Góra,58-500,Konopnickiej,19
+Nowy Sącz,33-300,Lwowska,99
+Konin,62-500,Dworcowa,22
+Piotrków Trybunalski,97-300,Słowackiego,11
+Inowrocław,88-100,Królowej Jadwigi,33
+Lubin,59-300,Odrodzenia,7
+Mysłowice,41-400,Pszczyńska,10
+Siedlce,08-110,Piłsudskiego,50
+Ostrowiec Świętokrzyski,27-400,Iłżecka,22
+Gniezno,62-200,Chrobrego,15
+Stargard,73-110,Piłsudskiego,44
+Siemianowice Śląskie,41-100,Świerczewskiego,19
+Suwałki,16-400,Kościuszki,90
+Głogów,67-200,Gwiaździsta,5
+Leszno,64-100,Wolności,12
+Pabianice,95-200,Zamkowa,8
+Zamość,22-400,Piłsudskiego,33
+Chełm,22-100,Lubelska,50
+Tomaszów Mazowiecki,97-200,św. Antoniego,14
+Stalowa Wola,37-450,Jana Pawła II,5
+Przemyśl,37-700,Franciszkańska,11
+Kędzierzyn-Koźle,47-200,Wojska Polskiego,40
+Łomża,18-400,Wojska Polskiego,88
+Żory,44-350,Kościuszki,15
+Bełchatów,97-400,Kościuszki,29
+Mielec,39-300,Mickiewicza,7
+Tarnowskie Góry,42-600,Krakowska,18
+Tczew,83-110,Gdańska,22
+Ełk,19-300,Wojska Polskiego,200
+Pruszków,05-800,Wojska Polskiego,55
+Warszawa,01-494,Wrocławska,5
+Kraków,30-059,Reymonta,15
+Łódź,90-001,Piotrkowska,200
+Wrocław,50-370,Curie-Skłodowskiej,12
+Poznań,61-680,Umultowska,8
+Gdańsk,80-320,Oliwska,4
+Szczecin,71-004,Cukrowa,9
+Bydgoszcz,85-739,Fordońska,111
+Lublin,20-718,Kraśnicka,55
+Białystok,15-399,Transportowa,3
+Katowice,40-163,Korfantego,99
+Gdynia,81-225,Morska,200
+Częstochowa,42-200,Jasnogórska,33
+Radom,26-600,Malczewskiego,7
+Sosnowiec,41-200,3 Maja,44
+Toruń,87-100,Szeroka,15
+Kielce,25-001,Sienkiewicza,60
+Rzeszów,35-001,Kościuszki,19
+Gliwice,44-100,Zwycięstwa,5
+Zabrze,41-800,Wolności,300
+Olsztyn,10-001,Pieniężnego,9
+Bielsko-Biała,43-300,Cieszyńska,55
+Bytom,41-900,Krakowska,12
+Ruda Śląska,41-700,1 Maja,50
+Rybnik,44-200,Chrobrego,22
+Tychy,43-100,Bielska,8
+Gorzów Wielkopolski,66-400,Chrobrego,9
+Elbląg,82-300,Stary Rynek,11
+Płock,09-400,Grodzka,4
+Opole,45-001,Ozimska,15
+Wałbrzych,58-300,Główna,8
+Zielona Góra,65-001,Westerplatte,33
+Tarnów,33-100,Krakowska,40
+Chorzów,41-500,Wolności,22
+Koszalin,75-001,Zwycięstwa,90
+Legnica,59-220,Złotoryjska,55
+Grudziądz,86-300,Pańska,8
+Słupsk,76-200,Sienkiewicza,12
+Jaworzno,43-600,Grunwaldzka,50
+Jastrzębie-Zdrój,44-330,Mazowiecka,2
+Jelenia Góra,58-500,Sudecka,9
+Nowy Sącz,33-300,Jagiellońska,15
+Konin,62-500,Przemysłowa,88
+Piotrków Trybunalski,97-300,Łódzka,4
+Inowrocław,88-100,Poznańska,19
+Lubin,59-300,Ścinawska,5
+Mysłowice,41-400,Mikołowska,22
+Siedlce,08-110,Warszawska,101
+Ostrowiec Świętokrzyski,27-400,Siennieńska,7
+Gniezno,62-200,Witkowska,12
+Stargard,73-110,Szczecińska,5
+Siemianowice Śląskie,41-100,Bytkowska,9
+Suwałki,16-400,Noniewicza,3
+Głogów,67-200,Wojska Polskiego,22
+Leszno,64-100,Lipowa,15
+Pabianice,95-200,Partyzancka,30
+Zamość,22-400,Lwowska,8
+Chełm,22-100,Rejowiecka,11
+Tomaszów Mazowiecki,97-200,Graniczna,6
+Stalowa Wola,37-450,Staszica,15
+Przemyśl,37-700,Słowackiego,9
+Kędzierzyn-Koźle,47-200,Kozielska,50
+Łomża,18-400,Szosa Zambrowska,12
+Żory,44-350,Wodzisławska,3
+Bełchatów,97-400,Lipowa,9
+Mielec,39-300,Sienkiewicza,44
+Tarnowskie Góry,42-600,Zagórska,5
+Tczew,83-110,Jagiellońska,19
+Ełk,19-300,Kilińskiego,2
+Pruszków,05-800,Kraszewskiego,7
+Warszawa,00-001,Marszałkowska,150
+Kraków,30-001,Grodzka,10
+Łódź,90-001,Narutowicza,100
+Wrocław,50-100,Ruska,33
+Poznań,61-700,Niepodległości,12
+Gdańsk,80-800,Piwna,8
+Szczecin,70-400,Wyzwolenia,22
+Bydgoszcz,85-001,Jagiellońska,50
+Lublin,20-001,Krakowskie Przedmieście,10
+Białystok,15-001,Sienkiewicza,15
+Katowice,40-001,Chorzowska,150
+Gdynia,81-001,Władysława IV,25
+Częstochowa,42-200,Dąbrowskiego,55
+Radom,26-600,Żeromskiego,88
+Sosnowiec,41-200,Piłsudskiego,4
+Toruń,87-100,Mickiewicza,12
+Kielce,25-001,Warszawska,5
+Rzeszów,35-001,Piłsudskiego,20
+Gliwice,44-100,Pszczyńska,100
+Zabrze,41-800,Roosevelta,5
+Olsztyn,10-001,Kościuszki,99
+Bielsko-Biała,43-300,Partyzantów,15
+Bytom,41-900,Jagiellońska,3
+Ruda Śląska,41-700,Kłodnicka,9
+Rybnik,44-200,Raciborska,18
+Tychy,43-100,Niepodległości,50
+Gorzów Wielkopolski,66-400,Warszawska,22
+Elbląg,82-300,Grunwaldzka,150
+Płock,09-400,Wyszogrodzka,22
+Opole,45-001,Wrocławska,12
