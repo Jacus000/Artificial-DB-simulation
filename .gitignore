@@ -6,6 +6,7 @@
 .venv/
 venv/
 env/
+.env/
 
 # Systemowe (Mac i Windows)
 .DS_Store
