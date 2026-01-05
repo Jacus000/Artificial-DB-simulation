@@ -1,7 +1,7 @@
 import pandas as pd
 import random
 import numpy as np
-from data.data_loader import load_data
+from python.load_into_db.data_loader import load_data
 import unicodedata
 import re
 

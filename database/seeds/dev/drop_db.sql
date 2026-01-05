@@ -3,10 +3,10 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS
     compensation_paid,
     accidents,
-    accident_types,
+    accident_type,
     guests_visit,
     guests_personal_data,
-    guests,
+    guest,
     ticket_types,
     insurance_plans,
     malfunction_report,
@@ -18,6 +18,10 @@ DROP TABLE IF EXISTS
     employee_personal_data,
     employees,
     positions,
+    facilities,
+    facility_sales,
+    facility_expenses,
+    test_workers_pd,
     sectors;
 
 SET FOREIGN_KEY_CHECKS = 1;
