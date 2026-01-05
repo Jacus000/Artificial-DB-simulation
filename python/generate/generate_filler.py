@@ -71,7 +71,7 @@ def email_generator(people):
 
 # Generuje pesel wzgledem płci
 def get_random_pesel(gender):
-    year = random.randint(1950,2020)
+    year = random.randint(1960,2007)
     month = random.randint(1,12)
     day = random.randint(1,28)
 

@@ -8,6 +8,3 @@ def wpd(n):
     workers_pd = pd.concat([workers_personal_data, adresy], axis=1)
     workers_pd.columns = ['name', 'last_name', 'gender', 'email', 'PESEL', 'phone_number', 'city', 'postal_code', 'street', 'house_number']
     return workers_pd
-
-# with pd.option_context('display.max_columns', None):
-#     print(wpd(n))
