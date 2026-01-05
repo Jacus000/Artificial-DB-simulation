@@ -1,2 +1,4 @@
-CREATE DATABASE:
+CREATE DATABASE: 
+(It's important to drop db and use 2 commands stated below to correctly fill static)
 ./init_db.sh
+./fill_static_data.sh
