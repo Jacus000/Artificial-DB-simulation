@@ -1,4 +1,4 @@
-from python.generate.generate_filler import (phone_number_generator, address_generator2, names_surenames_generator, email_generator, pesel_generator)
+from python.generate.general_gen_functions import (phone_number_generator, address_generator2, names_surenames_generator, email_generator, pesel_generator)
 import pandas as pd
 
 def wpd(n):

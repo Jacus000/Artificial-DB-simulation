@@ -24,8 +24,9 @@ def get_random(names, weights, n):
 
 
 # Generowanie losowych par, imion i nazwisk
-def names_surenames_generator(n, data=load_data(['imiona_meskie.csv', 'imiona_zenskie.csv', 'nazwiska_meskie.csv', 'nazwiska_zenskie.csv'])):
-    male_names, female_names, male_surenames, female_surenames = data
+def names_surenames_generator(n, data_name=['imiona_meskie.csv', 'imiona_zenskie.csv', 'nazwiska_meskie.csv', 'nazwiska_zenskie.csv']):
+    male_names, female_names, male_surenames, female_surenames = data_name
+    male_names, female_names, male_surenames, female_surenames= load_data(male_names), load_data(female_names), load_data(male_names), load_data(female_surenames)
 
     # wagi
     male_names["weight"] = male_names["LICZBA_WYSTĄPIEŃ"] / male_names["LICZBA_WYSTĄPIEŃ"].sum()
@@ -95,12 +96,12 @@ def pesel_generator(data):
     return data
 
 # korzystajac z adresy.csv wybeiramy losowo wiersze bez powtorek (maks 310)
-def address_generator(n, data=load_data(['adresy.csv'])):
+def address_generator(n, data=load_data('adresy.csv')):
     return data[0].sample(n=n, replace=False).reset_index(drop=True)
 
 
 # inna wersja z losowaniem ulicy i numerow_domow
-def address_generator2(n, data=(load_data(['adresy.csv'])).pop()):
+def address_generator2(n, data=(load_data('adresy.csv'))):
     streets = data["ulica"].unique()
     data = data.sample(n=n, replace=False).reset_index(drop=True)
     data["ulica"] = np.random.choice(streets, size=n)
