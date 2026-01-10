@@ -1,7 +1,7 @@
 import pandas as pd
 import random
 import numpy as np
-from python.load_into_db.data_loader import load_data
+from load_into_db.data_loader import load_data
 import unicodedata
 import re
 
@@ -40,8 +40,8 @@ def names_surenames_generator(n, data=load_data(['imiona_meskie.csv', 'imiona_ze
     gen_female_surenames = get_random(female_surenames["Nazwisko aktualne"], female_surenames.weight, n//2)
 
     # frame mezczyzn i kobiet + dodanie płci
-    men = pd.DataFrame({"name" : gen_male_names, "last_name" : gen_male_surenames, "gender" : "Male"},)
-    women = pd.DataFrame({"name" : gen_female_names, "last_name" : gen_female_surenames, "gender" : "Female"})
+    men = pd.DataFrame({"name" : gen_male_names, "last_name" : gen_male_surenames, "gender" : "man"},)
+    women = pd.DataFrame({"name" : gen_female_names, "last_name" : gen_female_surenames, "gender" : "woman"})
 
     # laczenie frame'u men i woman w jeden frame i przestasowanie
     people = pd.concat([men, women]).sample(frac=1).reset_index(drop=True)
@@ -100,7 +100,7 @@ def address_generator(n, data=load_data(['adresy.csv'])):
 
 
 # inna wersja z losowaniem ulicy i numerow_domow
-def address_generator2(n, data=(load_data(['adresy.csv'])).pop()):
+def address_generator2(n, data=load_data(['adresy.csv'])):
     streets = data["ulica"].unique()
     data = data.sample(n=n, replace=False).reset_index(drop=True)
     data["ulica"] = np.random.choice(streets, size=n)
