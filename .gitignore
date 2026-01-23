@@ -6,7 +6,7 @@
 .venv/
 venv/
 env/
-.env/
+.env
 
 # Systemowe (Mac i Windows)
 .DS_Store
@@ -14,7 +14,7 @@ Thumbs.db
 
 # Pythonowe śmieci
 __pycache__/
-__init__/
+**/__init__.py
 *.pyc
 *.pyo
 *.pyd

@@ -1,46 +1,23 @@
-from sqlalchemy import create_engine, text
-from urllib.parse import quote_plus
+
 import random
 import math
-from dotenv import load_dotenv
-import os
 from .generate_filler import names_surenames_generator
-
-# Format: mariadb+mariadbconnector://uzytkownik:haslo@host:port/nazwa_bazy
-
-load_dotenv()
-
-USER = os.getenv("DB_USER")
-PASSWORD = quote_plus(os.getenv("DB_PASSWORD"))
-HOST = os.getenv("DB_HOST")
-PORT = os.getenv("DB_PORT")
-DATABASE = os.getenv("DB_NAME")
-
-
-engine = create_engine(f"mariadb+mariadbconnector://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
+from db.fetch_from_db import DataBaseAccess
 
 class GenerateEmployees:
     def __init__(self, employees_count: int):
         self.employees_count = employees_count
+        self.db = DataBaseAccess()
 
     def generate_staff(self):
-        positions_list = []
         
         employees_df = names_surenames_generator(self.employees_count)
         employees_df["id_position"] = None
         
         try:
-            with engine.connect() as connection:
-                query = text("SELECT id_position, base_salary FROM positions")
-                #query2 = text("SELECT COUNT(*) FROM employees")
-                result = connection.execute(query)
-                #count = connection.execute(query2).scalar_one()
-                
-                for row in result.mappings():
-                    positions_list.append(
-                          (row["id_position"], row["base_salary"])
-                    )
-            
+            positions = self.db.fetch_all("SELECT id_position, base_salary FROM positions")
+            positions_list = [(row["id_position"], row["base_salary"]) for row in positions]
+
             position_ids = [p[0] for p in positions_list]
             salaries = [p[1] for p in positions_list]
             
@@ -64,10 +41,18 @@ class GenerateEmployees:
 
         except Exception as e:
             print(f"Błąd połączenia: {e}")
-            return [], 0
-    
-employee = GenerateEmployees(100).generate_staff()
-print(employee)
+            return []
+
+if __name__ == "__main__":
+    employee = GenerateEmployees(100).generate_staff()
+    if not employee.empty:
+        data_to_save = employee.to_dict(orient = 'records')
+        db = DataBaseAccess()
+        db.insert_data("employees", data_to_save)
+    else:
+        print("brak danych do zapisania")
+    #print(employee)
+
 
 
 
