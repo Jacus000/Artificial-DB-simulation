@@ -1,7 +1,7 @@
 import pandas as pd
 import random
 import numpy as np
-from python.load_into_db.data_loader import load_data
+from load_into_db.data_loader import load_data
 import unicodedata
 import re
 
@@ -24,9 +24,8 @@ def get_random(names, weights, n):
 
 
 # Generowanie losowych par, imion i nazwisk
-def names_surenames_generator(n, file_names=['imiona_meskie.csv', 'imiona_zenskie.csv', 'nazwiska_meskie.csv', 'nazwiska_zenskie.csv']):
-    male_names, female_names, male_surenames, female_surenames = file_names
-    male_names, female_names, male_surenames, female_surenames = load_data(male_names), load_data(female_names), load_data(male_surenames), load_data(female_surenames)
+def names_surenames_generator(n, data=load_data(['imiona_meskie.csv', 'imiona_zenskie.csv', 'nazwiska_meskie.csv', 'nazwiska_zenskie.csv'])):
+    male_names, female_names, male_surenames, female_surenames = data
 
     # wagi
     male_names["weight"] = male_names["LICZBA_WYSTĄPIEŃ"] / male_names["LICZBA_WYSTĄPIEŃ"].sum()
@@ -41,8 +40,8 @@ def names_surenames_generator(n, file_names=['imiona_meskie.csv', 'imiona_zenski
     gen_female_surenames = get_random(female_surenames["Nazwisko aktualne"], female_surenames.weight, n//2)
 
     # frame mezczyzn i kobiet + dodanie płci
-    men = pd.DataFrame({"first_name" : gen_male_names, "second_name" : gen_male_surenames, "gender" : "Male"},)
-    women = pd.DataFrame({"first_name" : gen_female_names, "second_name" : gen_female_surenames, "gender" : "Female"})
+    men = pd.DataFrame({"first_name" : gen_male_names, "second_name" : gen_male_surenames, "gender" : "man"},)
+    women = pd.DataFrame({"first_name" : gen_female_names, "second_name" : gen_female_surenames, "gender" : "woman"})
 
     # laczenie frame'u men i woman w jeden frame i przestasowanie
     people = pd.concat([men, women]).sample(frac=1).reset_index(drop=True)
@@ -72,7 +71,7 @@ def email_generator(people):
 
 # Generuje pesel wzgledem płci
 def get_random_pesel(gender):
-    year = random.randint(1960,2007)
+    year = random.randint(1950,2020)
     month = random.randint(1,12)
     day = random.randint(1,28)
 
@@ -96,12 +95,12 @@ def pesel_generator(data):
     return data
 
 # korzystajac z adresy.csv wybeiramy losowo wiersze bez powtorek (maks 310)
-def address_generator(n, data=load_data('adresy.csv')):
+def address_generator(n, data=load_data(['adresy.csv'])):
     return data[0].sample(n=n, replace=False).reset_index(drop=True)
 
 
 # inna wersja z losowaniem ulicy i numerow_domow
-def address_generator2(n, data=(load_data('adresy.csv'))):
+def address_generator2(n, data=load_data(['adresy.csv'])):
     streets = data["ulica"].unique()
     data = data.sample(n=n, replace=False).reset_index(drop=True)
     data["ulica"] = np.random.choice(streets, size=n)
