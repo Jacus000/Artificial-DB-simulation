@@ -24,9 +24,9 @@ def get_random(names, weights, n):
 
 
 # Generowanie losowych par, imion i nazwisk
-def names_surenames_generator(n, data_name=['imiona_meskie.csv', 'imiona_zenskie.csv', 'nazwiska_meskie.csv', 'nazwiska_zenskie.csv']):
-    male_names, female_names, male_surenames, female_surenames = data_name
-    male_names, female_names, male_surenames, female_surenames= load_data(male_names), load_data(female_names), load_data(male_names), load_data(female_surenames)
+def names_surenames_generator(n, file_names=['imiona_meskie.csv', 'imiona_zenskie.csv', 'nazwiska_meskie.csv', 'nazwiska_zenskie.csv']):
+    male_names, female_names, male_surenames, female_surenames = file_names
+    male_names, female_names, male_surenames, female_surenames = load_data(male_names), load_data(female_names), load_data(male_surenames), load_data(female_surenames)
 
     # wagi
     male_names["weight"] = male_names["LICZBA_WYSTĄPIEŃ"] / male_names["LICZBA_WYSTĄPIEŃ"].sum()
@@ -41,8 +41,8 @@ def names_surenames_generator(n, data_name=['imiona_meskie.csv', 'imiona_zenskie
     gen_female_surenames = get_random(female_surenames["Nazwisko aktualne"], female_surenames.weight, n//2)
 
     # frame mezczyzn i kobiet + dodanie płci
-    men = pd.DataFrame({"name" : gen_male_names, "last_name" : gen_male_surenames, "gender" : "Male"},)
-    women = pd.DataFrame({"name" : gen_female_names, "last_name" : gen_female_surenames, "gender" : "Female"})
+    men = pd.DataFrame({"first_name" : gen_male_names, "second_name" : gen_male_surenames, "gender" : "Male"},)
+    women = pd.DataFrame({"first_name" : gen_female_names, "second_name" : gen_female_surenames, "gender" : "Female"})
 
     # laczenie frame'u men i woman w jeden frame i przestasowanie
     people = pd.concat([men, women]).sample(frac=1).reset_index(drop=True)
