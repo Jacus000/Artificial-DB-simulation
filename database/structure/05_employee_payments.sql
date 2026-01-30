@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS employee_payments (
     base_salary_id INT UNSIGNED NOT NULL,
     bonus DECIMAL(10,2) UNSIGNED DEFAULT 0,
     deduction DECIMAL(10,2) UNSIGNED DEFAULT 0,
-    paid_amount DECIMAL(10,2) UNSIGNED NOT NULL,
     payment_date DATE NOT NULL,
 
     CONSTRAINT fk_payment_employee
@@ -18,9 +17,6 @@ CREATE TABLE IF NOT EXISTS employee_payments (
 
     CONSTRAINT uq_employee_month
         UNIQUE (id_employee, salary_month),
-
-    CONSTRAINT chk_paid_amount_positive
-        CHECK (paid_amount >= 0),
 
     CONSTRAINT chk_bonus_deduction
         CHECK (bonus >= 0 AND deduction >= 0)

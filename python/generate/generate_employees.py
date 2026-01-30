@@ -2,24 +2,25 @@
 import random
 import math
 from .generate_filler import names_surenames_generator
-from db.fetch_from_db import DataBaseAccess
+from python.db.fetch_from_db import DataBaseAccess
 
 class GenerateEmployees:
-    def __init__(self, employees_count: int):
+    def __init__(self, employees_count: int, **kwargs):
         self.employees_count = employees_count
         self.db = DataBaseAccess()
 
-    def generate_staff(self):
+    def generate(self):
         
         employees_df = names_surenames_generator(self.employees_count)
         employees_df["id_position"] = None
         
         try:
-            positions = self.db.fetch_all("SELECT id_position, base_salary FROM positions")
+            query = "SELECT id_position, base_salary FROM positions"
+            positions = self.db.fetch_all(query)
             positions_list = [(row["id_position"], row["base_salary"]) for row in positions]
 
             position_ids = [p[0] for p in positions_list]
-            salaries = [p[1] for p in positions_list]
+            salaries = [float(p[1]) for p in positions_list]
             
             alpha = 0.00012
             weights = [math.exp(-alpha*s) for s in salaries]
@@ -36,22 +37,23 @@ class GenerateEmployees:
                 employees_df.loc[i, "id_position"] = chosen_id
             
             employees_df = employees_df.sample(frac=1)
+            data_to_send = employees_df.to_dict(orient='records')
 
-            return employees_df
+            return data_to_send
 
         except Exception as e:
             print(f"Błąd połączenia: {e}")
-            return []
+            return None
 
-if __name__ == "__main__":
-    employee = GenerateEmployees(100).generate_staff()
-    if not employee.empty:
-        data_to_save = employee.to_dict(orient = 'records')
-        db = DataBaseAccess()
-        db.insert_data("employees", data_to_save)
-    else:
-        print("brak danych do zapisania")
-    #print(employee)
+# if __name__ == "__main__":
+#     employee = GenerateEmployees(100).generate()
+#     if not employee.empty:
+#         data_to_save = employee.to_dict(orient = 'records')
+#         db = DataBaseAccess()
+#         db.insert_data("employees", data_to_save)
+#     else:
+#         print("brak danych do zapisania")
+#     #print(employee)
 
 
 

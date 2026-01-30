@@ -2,11 +2,11 @@ import math
 import random as rd
 import numpy as np
 from datetime import datetime, timezone, timedelta
-from db.fetch_from_db import DataBaseAccess
+from python.db.fetch_from_db import DataBaseAccess
 import pandas as pd
 
 class GenerateSalaryHistory:
-    def __init__(self, starting_date: datetime):
+    def __init__(self, starting_date: datetime, **kwargs):
         self.starting_date = starting_date
         self.db = DataBaseAccess()
         self.now = datetime.now(timezone.utc)
@@ -17,7 +17,7 @@ class GenerateSalaryHistory:
         prob = (worker_lenght_of_service // 2 + 1) * 0.08
         return min(prob,1.0)
 
-    def generate_salary_history(self):
+    def generate(self):
         history_records = []
         try:
             query = """
@@ -34,15 +34,13 @@ class GenerateSalaryHistory:
             starter_data_ids = {row[0] for row in rd.sample(data_list, int(len(data_list) * 0.7))}
 
             for emp_id, base_salary in data_list:
-                # Ustalenie daty zatrudnienia
                 if emp_id in starter_data_ids:
                     hire_date = self.starting_date
                 else:
                     random_days = rd.randint(0, max(1, (self.now - self.starting_date).days))
                     hire_date = self.starting_date + timedelta(days=random_days)
                 
-                current_salary = base_salary
-                # record_start_date śledzi, od kiedy obowiązuje OBECNA pensja
+                current_salary = float(base_salary)
                 record_start_date = hire_date
                 current_date = hire_date
 
@@ -50,12 +48,9 @@ class GenerateSalaryHistory:
                     months = rd.randint(4, 16)
                     next_review_date = current_date + timedelta(days=months * 30)
 
-                    # Sprawdzamy, czy w tym terminie "przeglądu" wpada podwyżka
                     months_of_service = (current_date - self.starting_date).days / 30
                     
-                    # Jeśli następuje podwyżka I nie wybiegamy w przyszłość
                     if next_review_date < self.now and rd.random() < self.probablity_raise(months_of_service):
-                        # Zamykamy poprzedni rekord pensji
                         history_records.append({
                             "id_employee": emp_id,
                             "base_amount": current_salary,
@@ -63,15 +58,12 @@ class GenerateSalaryHistory:
                             "valid_to": next_review_date
                         })
                         
-                        # Naliczamy podwyżkę i ustawiamy nową datę rozpoczęcia dla nowej kwoty
                         raise_percent = rd.uniform(0.05, 0.2)
                         current_salary = round(current_salary * (1 + raise_percent), 2)
                         record_start_date = next_review_date
                     
-                    # Przesuwamy czas do przodu niezależnie od podwyżki
                     current_date = next_review_date
 
-                # Na koniec pętli dodajemy "obecnie obowiązującą" pensję (valid_to = None)
                 history_records.append({
                     "id_employee": emp_id,
                     "base_amount": current_salary,
@@ -84,20 +76,22 @@ class GenerateSalaryHistory:
                 df_salary['valid_from'] = pd.to_datetime(df_salary['valid_from']).dt.date
                 df_salary['valid_to'] = pd.to_datetime(df_salary['valid_to']).dt.date
                 df_salary = df_salary.where(pd.notnull(df_salary), None)
-            return df_salary
+            
+            data_to_send = df_salary.to_dict(orient='records')
+            return data_to_send
 
         except Exception as e:
             print(f"Błąd: {e}")
             return pd.DataFrame()
         
-if __name__ == "__main__":
-    starting_date = datetime(2024, 1, 12, tzinfo=timezone.utc)
-    generator = GenerateSalaryHistory(starting_date)
-    df_results = generator.generate_salary_history()
+# if __name__ == "__main__":
+#     starting_date = datetime(2024, 1, 12, tzinfo=timezone.utc)
+#     generator = GenerateSalaryHistory(starting_date)
+#     df_results = generator.generate()
     
-    if not df_results.empty:
-        data_to_save = df_results.to_dict(orient='records')
-        db = DataBaseAccess()
-        db.insert_data("salary_history", data_to_save)
-        print("Pomyślnie zapisano dane w bazie.")
+#     if not df_results.empty:
+#         data_to_save = df_results.to_dict(orient='records')
+#         db = DataBaseAccess()
+#         db.insert_data("salary_history", data_to_save)
+#         print("Pomyślnie zapisano dane w bazie.")
         

@@ -54,8 +54,12 @@ class DataBaseAccess:
         
     def fetch_all(self, query: str) -> list[dict] | None:
         with self.engine.connect() as conn:
-            result: Result = conn.execute(text(query))
-            return [dict(row) for row in result.mappings()]
+            try:
+                result: Result = conn.execute(text(query))
+                return [dict(row) for row in result.mappings()]
+            except Exception as e:
+                print(f"Blad laczenia albo cos innego {e}")
+                return None
     
     def fetch_one(self, query: str) -> dict | None:
         with self.engine.connect() as conn:

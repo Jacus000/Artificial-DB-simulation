@@ -1,7 +1,7 @@
 import pandas as pd
 import random
 import numpy as np
-from load_into_db.data_loader import load_data
+from python.load_into_db.data_loader import load_data
 import unicodedata
 import re
 
@@ -40,8 +40,8 @@ def names_surenames_generator(n, data=load_data(['imiona_meskie.csv', 'imiona_ze
     gen_female_surenames = get_random(female_surenames["Nazwisko aktualne"], female_surenames.weight, n//2)
 
     # frame mezczyzn i kobiet + dodanie płci
-    men = pd.DataFrame({"first_name" : gen_male_names, "second_name" : gen_male_surenames, "gender" : "man"},)
-    women = pd.DataFrame({"first_name" : gen_female_names, "second_name" : gen_female_surenames, "gender" : "woman"})
+    men = pd.DataFrame({"first_name" : gen_male_names, "last_name" : gen_male_surenames, "gender" : "man"},)
+    women = pd.DataFrame({"first_name" : gen_female_names, "last_name" : gen_female_surenames, "gender" : "woman"})
 
     # laczenie frame'u men i woman w jeden frame i przestasowanie
     people = pd.concat([men, women]).sample(frac=1).reset_index(drop=True)
@@ -66,7 +66,7 @@ def email_generator(people):
                   "@yahoo.com", "@wp.pl", "@onet.pl", "@interia.pl"]
         return random.choice(domain)
 
-    people["email"] = (people["name"] + people["last_name"]).apply(lambda mail: (remove_spec_chars(remove_accents(mail).lower()) + domain_generator()))
+    people["email"] = (people["first_name"] + people["last_name"]).apply(lambda mail: (remove_spec_chars(remove_accents(mail).lower()) + domain_generator()))
     return people
 
 # Generuje pesel wzgledem płci
@@ -99,11 +99,19 @@ def address_generator(n, data=load_data(['adresy.csv'])):
     return data[0].sample(n=n, replace=False).reset_index(drop=True)
 
 
-# inna wersja z losowaniem ulicy i numerow_domow
-def address_generator2(n, data=load_data(['adresy.csv'])):
+def address_generator2(n, data=None):
+    if data is None:
+        data = load_data(['adresy.csv'])[0]
+
     streets = data["ulica"].unique()
     data = data.sample(n=n, replace=False).reset_index(drop=True)
     data["ulica"] = np.random.choice(streets, size=n)
     data["numer_domu"] = np.random.choice(list(range(1, 200)), size=n)
-    return data
+    postal_codes = []
+    for _ in range(n):
+        part1 = f"{np.random.randint(0,10)}{np.random.randint(0,10)}"
+        part2 = f"{np.random.randint(0,10)}{np.random.randint(0,10)}{np.random.randint(0,10)}"
+        postal_codes.append(f"{part1}-{part2}")
+    data["kod_pocztowy"] = postal_codes
 
+    return data
