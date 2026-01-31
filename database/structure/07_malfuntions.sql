@@ -1,9 +1,8 @@
 CREATE TABLE malfunction_report (
-    id_malfunction_report INT UNSIGNED PRIMARY KEY,
+    id_malfunction_report INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     id_attraction INT UNSIGNED NOT NULL,
     id_employee_reported INT UNSIGNED NOT NULL,
     report_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    report_description TEXT NOT NULL,
     priority ENUM('low', 'medium', 'high', 'critical') DEFAULT 'medium',
     is_resolved BOOLEAN DEFAULT FALSE,
     is_resolved_at TIMESTAMP NULL,

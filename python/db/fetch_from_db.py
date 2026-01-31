@@ -28,8 +28,20 @@ class DataBaseAccess:
             raise RuntimeError("Missing DB configuration in .env")
         
         return create_engine(f"mariadb+mariadbconnector://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
-    
-    def insert_data(self, table_name: str, data: list[dict] | dict):
+    def execute(self, query: str) -> Result:
+        try:
+            with self.engine.connect() as conn:
+                with conn.begin():
+                    statements = query.split(';')
+                    for statement in statements:
+                        clean_stmt = statement.strip()
+                        if clean_stmt:
+                            conn.execute(text(clean_stmt))
+        except Exception as e:
+            print(f"Error while executing SQL query {e}")
+            raise
+
+    def insert_data(self, table_name: str, data: list[dict] | dict, chunk_size=1000):
         if not data:
             return
 
@@ -42,11 +54,15 @@ class DataBaseAccess:
         placeholders = ", ".join([f":{col}" for col in columns])
         
         query = f"INSERT INTO {table_name} ({col_names}) VALUES ({placeholders})"
-
+       
+        total_records = len(data)
         try:
             with self.engine.connect() as conn:
-                with conn.begin(): # Automatyczny COMMIT
-                    conn.execute(text(query), data)
+
+                for i in range(0, total_records, chunk_size):
+                    chunk = data[i : i+chunk_size]
+                    with conn.begin():
+                        conn.execute(text(query), chunk)
                 print(f"Pomyślnie wstawiono {len(data)} rekordów do tabeli '{table_name}'.")
         except Exception as e:
             print(f"Błąd podczas INSERT do tabeli {table_name}: {e}")

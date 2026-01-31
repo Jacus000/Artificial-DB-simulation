@@ -14,7 +14,6 @@ CREATE TABLE IF NOT EXISTS facility_expenses (
         'Security',    
         'LicensingAndPermits'                                
     ) NOT NULL,
-    expense_description TEXT DEFAULT '',
 
     CONSTRAINT fk_facility_expenses
         FOREIGN KEY (id_facility)

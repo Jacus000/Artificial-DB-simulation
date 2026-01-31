@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS guests_visit (
     id_guest INT UNSIGNED NOT NULL,
     id_ticket_type INT UNSIGNED NOT NULL,
     visit_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    id_purchase_ref INT UNSIGNED DEFAULT NULL,
 
     CONSTRAINT fk_visit_guest
         FOREIGN KEY (id_guest)
