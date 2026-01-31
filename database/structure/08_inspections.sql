@@ -5,7 +5,6 @@ CREATE TABLE inspections (
     inspection_date DATE NOT NULL,
     next_inspection_date DATE DEFAULT NULL,
     result ENUM('passed', 'failed') NOT NULL,
-    comments TEXT DEFAULT NULL,
 
     CONSTRAINT fk_inspections_attraction
         FOREIGN KEY (id_attraction)

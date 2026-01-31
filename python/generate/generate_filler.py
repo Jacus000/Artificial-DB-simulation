@@ -57,16 +57,34 @@ def email_generator(people):
         ascii_text = text.encode('ascii', 'ignore')
         return ascii_text.decode('utf-8')
 
-    # usuwa spacje i znaki specjalne
     def remove_spec_chars(text):
         return "".join(re.sub(r'[^a-zA-Z0-9 ]', '', text).split())
 
     def domain_generator():
-        domain = ["@gmail.com", "@outlook.com", "@icloud.com",
-                  "@yahoo.com", "@wp.pl", "@onet.pl", "@interia.pl"]
-        return random.choice(domain)
+        domains = ["@gmail.com", "@outlook.com", "@icloud.com",
+                   "@yahoo.com", "@wp.pl", "@onet.pl", "@interia.pl"]
+        return random.choice(domains)
 
-    people["email"] = (people["first_name"] + people["last_name"]).apply(lambda mail: (remove_spec_chars(remove_accents(mail).lower()) + domain_generator()))
+    used_emails = set()
+    emails = []
+
+    for _, row in people.iterrows():
+        name_part = remove_spec_chars(remove_accents(row["first_name"] + row["last_name"]).lower())
+        domain = domain_generator()
+        email = name_part + domain
+        
+        if email in used_emails:
+            random_suffix = str(random.randint(10, 99))
+            email = name_part + random_suffix + domain
+            
+            while email in used_emails:
+                random_suffix = str(random.randint(10, 99))
+                email = name_part + random_suffix + domain
+
+        used_emails.add(email)
+        emails.append(email)
+
+    people["email"] = emails
     return people
 
 # Generuje pesel wzgledem płci
@@ -104,7 +122,7 @@ def address_generator2(n, data=None):
         data = load_data(['adresy.csv'])[0]
 
     streets = data["ulica"].unique()
-    data = data.sample(n=n, replace=False).reset_index(drop=True)
+    data = data.sample(n=n, replace=True).reset_index(drop=True)
     data["ulica"] = np.random.choice(streets, size=n)
     data["numer_domu"] = np.random.choice(list(range(1, 200)), size=n)
     postal_codes = []

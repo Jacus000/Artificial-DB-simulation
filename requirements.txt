@@ -1,0 +1,5 @@
+numpy==2.4.1
+pandas==3.0.0
+python-dotenv==1.2.1
+python_dateutil==2.9.0.post0
+SQLAlchemy==2.0.46

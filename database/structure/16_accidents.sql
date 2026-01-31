@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS accidents (
     id_accident_type INT UNSIGNED NOT NULL,
     accident_description TEXT DEFAULT NULL,
     report_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    accident_status ENUM('reported', 'in_progress', 'settled', 'rejected') NOT NULL DEFAULT 'rejected',
     
     CONSTRAINT fk_accident_visit
         FOREIGN KEY (id_visit)
