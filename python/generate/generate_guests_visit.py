@@ -60,15 +60,31 @@ class GenerateGuestsVisits:
         all_visits = []
         days_diff = (self.now - self.starting_date).days
         
-        #mozemy dostosowac ile chcemy gosci dziennie
-        max_g = int(total_guests / 8)
+        #mozna pozmienia
+        max_g = int(total_guests / 65)
         min_g = int(max_g / 2)
 
         for i in range(days_diff + 1):
             day_date = self.starting_date + timedelta(days=i)
-            num_guests_today = random.randint(max(1, min_g), max(2, max_g))
             
-            todays_df = df_guests.sample(n=min(num_guests_today, len(df_guests)), replace=False)
+            #logika sezonowosci
+
+            if 4 <= day_date.month <= 10:
+                season_multiplier = 1.0
+            else:
+                season_multiplier = 0.5
+            
+            if day_date.weekday() >= 5:
+                season_multiplier *= 1.2
+
+            current_min = max(1, int(min_g * season_multiplier))
+            current_max = max(2, int(max_g * season_multiplier))
+            num_guests_today = random.randint(current_min, current_max)
+            
+            if num_guests_today > len(df_guests):
+                num_guests_today = len(df_guests)
+                
+            todays_df = df_guests.sample(n=num_guests_today, replace=False).copy()
             
             todays_df['cat'] = np.select(
                 [todays_df['age'] < 18, todays_df['age'] >= 65, (todays_df['age'] >= 18) & (todays_df['age'] <= 26)],
@@ -79,7 +95,6 @@ class GenerateGuestsVisits:
             for cat, group in todays_df.groupby('cat'):
                 n_in_cat = len(group)
                 pool = ticket_pools[cat]
-                
                 chosen_tickets = np.random.choice(pool['ids'], size=n_in_cat, p=pool['probs'])
                 
                 hours = np.random.randint(10, 20, size=n_in_cat)
@@ -87,7 +102,7 @@ class GenerateGuestsVisits:
                 seconds = np.random.randint(0, 60, size=n_in_cat)
                 
                 for idx, (guest_id, ticket_id) in enumerate(zip(group['id_guest'], chosen_tickets)):
-                    visit_time = day_date.replace(hour=hours[idx], minute=minutes[idx], second=seconds[idx])
+                    visit_time = day_date.replace(hour=hours[idx], minute=minutes[idx], second=seconds[idx], tzinfo=None)
                     all_visits.append({
                         'id_guest': guest_id,
                         'id_ticket_type': ticket_id,

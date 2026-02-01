@@ -14,5 +14,6 @@ TRUNCATE TABLE  employee_personal_data;
 TRUNCATE TABLE  employees;
 TRUNCATE TABLE  facility_sales;
 TRUNCATE TABLE  facility_expenses;
+TRUNCATE TABLE  attraction_visits;
 
 SET FOREIGN_KEY_CHECKS = 1;

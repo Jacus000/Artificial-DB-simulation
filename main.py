@@ -17,3 +17,4 @@ def main():
 #4. Po calym procesie struktura bazy wraz z danymi powinna byc na serwerze
 if __name__ == "__main__":
     main()
+    
