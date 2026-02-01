@@ -24,12 +24,11 @@ from pathlib import Path
 
 DB_CONFIG = {
     "employees_count": 150,
-    "guest_count": 2000,
+    "guest_count": 15000,
     "max_number_of_rides_per_entry": 6, #ostroznie wiecej moze wysadzic czas oczekiwania (mozna zmienic ilosc gosci), minimum 3
-    "daily_guests": 600,
     "todays_date": datetime.now(timezone.utc),
     "starting_date": datetime(2024, 1, 12, tzinfo=timezone.utc),
-    "intensity": 0.8, #expenses/sales intensity
+    "intensity": 0.8, #expenses/sales intensity facilities
     "probability_of_accidents": 0.001 #0.001 bardzo malo
 }
 

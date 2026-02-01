@@ -22,6 +22,7 @@ DROP TABLE IF EXISTS
     facility_sales,
     facility_expenses,
     test_employees,
+    attraction_visits,
     sectors;
 
 SET FOREIGN_KEY_CHECKS = 1;

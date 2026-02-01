@@ -6,7 +6,7 @@ import pandas as pd
 class GenerateFacilityExpenses:
     CONFIG = {#format (typ wydatku) : (czestosc, (sredni koszt))
         'restaurant': {
-            'FoodAndBeverages': (70, (200, 1500)),
+            'FoodAndBeverages': (70, (200, 1000)),
             'AlcoholSupplies':  (15, (500, 2500)),
             'Utilities':        (5,  (1000, 4000)),
             'Cleaning':         (10, (100, 500))
