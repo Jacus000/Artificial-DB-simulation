@@ -1,0 +1,1030 @@
+---
+title: "Raport i Analiza"
+author: "AiBtcQuantowcy"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: flatly
+    toc: true
+    toc_float: true
+    number_sections: true
+  word_document:
+    toc: true
+    number_sections: true
+  pdf_document:
+    toc: true
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+library(tidyverse)
+library(DBI)
+library(RMariaDB)
+library(dotenv)
+library(lubridate)
+library(kableExtra)
+library(scales)
+
+#Ładowanie zmiennych z pliku .env
+load_dot_env(file = ".env")
+```
+
+```{r database-connection}
+#Łączymy z MariaDB za pomocą RMariaDB
+con <- dbConnect(
+  MariaDB(),
+  user = Sys.getenv("DB_USER"),
+  password = Sys.getenv("DB_PASSWORD"),
+  dbname = Sys.getenv("DB_NAME"),
+  host = Sys.getenv("DB_HOST"),
+  port = as.integer(Sys.getenv("DB_PORT"))
+)
+```
+
+# Popularność Atrakcji i Finanse
+
+W tej sekcji analizujemy, które atrakcje przyciągają najwięcej gości oraz czy są one rentowne.
+
+## Metodologia liczenia przychodu
+Ponieważ w parku płaci się za bilet wstępu, a nie za poszczególne atrakcje, przychód dla danej atrakcji jest **alokowany**.
+$$ Przychód_{atrakcji} = \sum_{wizyty} \frac{Cena Biletu}{Liczba Odwiedzonych Atrakcji} $$
+
+```{r financial-analysis}
+#Pobieramy dane o wizytach, biletach i cenach
+query_visits <- "
+  SELECT 
+    av.id_visit,
+    av.id_attraction,
+    a.att_name,
+    tt.price
+  FROM attraction_visits av
+  JOIN attractions a ON av.id_attraction = a.id_attraction
+  JOIN guests_visit gv ON av.id_visit = gv.id_visit
+  JOIN ticket_types tt ON gv.id_ticket_type = tt.id_ticket_type
+"
+df_visits <- dbGetQuery(con, query_visits)
+
+#Pobieramy koszty utrzymania
+query_costs <- "
+  SELECT 
+    a.att_name,
+    SUM(ac.amount) as total_cost
+  FROM attraction_costs ac
+  JOIN attractions a ON ac.id_attraction = a.id_attraction
+  GROUP BY a.att_name
+"
+df_costs <- dbGetQuery(con, query_costs)
+
+#Przetwarzanie danych z pakietem dplyr
+
+#Liczymy ile razy dany gość skorzystał z atrakcji
+df_revenue <- df_visits %>%
+  group_by(id_visit) %>%
+  mutate(rides_per_visit = n()) %>%
+  ungroup() %>%
+  mutate(allocated_revenue = price / rides_per_visit) %>%
+  group_by(att_name) %>%
+  summarise(
+    total_revenue = sum(allocated_revenue),
+    visit_count = n()
+  )
+
+#Łączymy przychody z kosztami
+df_financials <- df_revenue %>%
+  left_join(df_costs, by = "att_name") %>%
+  mutate(
+    total_cost = replace_na(total_cost, 0),
+    profit = total_revenue - total_cost,
+    roi = (profit / total_cost) * 100
+  ) %>%
+  arrange(desc(profit))
+```
+
+```{r, echo=FALSE}
+#Lista nierentownych 
+unprofitable_list <- df_financials %>%
+  filter(profit < 0) %>%
+  pull(att_name)
+
+#Jeśli lista jest pusta
+if(length(unprofitable_list) > 0) {
+  txt_unprofitable <- paste(paste0("*", unprofitable_list, "*"), collapse = ", ")
+} else {
+  txt_unprofitable <- "wszystkie atrakcje przynoszą zysk"
+}
+
+#Lista Top 3 najbardziej dochodowych
+top_winners_list <- df_financials %>%
+  arrange(desc(profit)) %>%
+  head(3) %>% #Bierzemy 3
+  pull(att_name)
+
+txt_winners <- paste(paste0("*", top_winners_list, "*"), collapse = ", ")
+```
+
+
+## Najpopularniejsze i Najbardziej Dochodowe Atrakcje
+
+```{r plot-profitability, fig.width=10, fig.height=6}
+#Wykres zysku z atrakcji
+ggplot(df_financials, aes(x = reorder(att_name, profit), y = profit, fill = profit > 0)) +
+  geom_col() +
+  coord_flip() +
+  scale_y_continuous(labels = scales::number_format(big.mark = " ", suffix = " PLN", accuracy = 1)) +
+  scale_fill_manual(values = c("TRUE" = "#2ecc71", "FALSE" = "#e74c3c"), guide = "none") +
+  labs(
+    title = "Rentowność Atrakcji (Przychód - Koszty)",
+    x = "Nazwa Atrakcji",
+    y = "Zysk (PLN)"
+  ) +
+  theme_minimal()
+```
+
+**Tabela szczegółowa:**
+
+```{r table-profitability}
+df_financials %>%
+  select(Atrakcja = att_name, `Liczba Odwiedzin` = visit_count, Przychód = total_revenue, Koszt = total_cost, Zysk = profit) %>%
+  head(20) %>%
+  kbl() %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+Na podstawie analizy widzimy, że atrakcje takie jak: **`r txt_unprofitable`** są obecnie nierentowne. Z kolei największe zyski dla parku generują: **`r txt_winners`**. Zalecana jest zwiększona promocja nierentownych atrakcji, gdy owe istnieją i na podstawie zbieranych danych aniektowych ustalenie czy atrakcje te są bezpieczne, co może powodować ich słabe wyniki.
+
+
+---
+# Wpływ Awarii na Przychody
+```{r malfunction-impact-analysis}
+#Dzienny przychód z biletów
+query_daily_rev <- "
+  SELECT 
+    DATE(visit_date) as date,
+    SUM(tt.price) as revenue
+  FROM guests_visit gv
+  JOIN ticket_types tt ON gv.id_ticket_type = tt.id_ticket_type
+  GROUP BY date
+"
+df_rev <- dbGetQuery(con, query_daily_rev)
+
+#Okresy awarii
+query_fails_intervals <- "
+  SELECT 
+    DATE(report_date) as start_date,
+    COALESCE(DATE(is_resolved_at), CURRENT_DATE) as end_date
+  FROM malfunction_report
+  WHERE priority IN ('high', 'critical')
+"
+df_intervals <- dbGetQuery(con, query_fails_intervals)
+
+#Dni z awariami
+bad_days <- df_intervals %>%
+  rowwise() %>%
+  mutate(date_sequence = list(seq(from = as.Date(start_date), to = as.Date(end_date), by = "day"))) %>%
+  ungroup() %>%
+  select(date_sequence) %>%
+  unnest(date_sequence) %>%
+  distinct(date_sequence) %>% #Usuwamy duplikaty gdy 2 atrakcje zepsuły się tego samego dnia
+  pull(date_sequence) 
+
+#Łączymy dane i oznaczamy status dnia
+df_analysis <- df_rev %>%
+  mutate(date = as.Date(date)) %>%
+  mutate(
+    #Sprawdzamy czy data znajduje się na liście dni z aweariami
+    status = if_else(date %in% bad_days, "Awaria (High/Crit)", "Dzień Normalny")
+  )
+
+#Obliczamy średnie
+stats_impact <- df_analysis %>%
+  group_by(status) %>%
+  summarise(
+    avg_revenue = mean(revenue),
+    count = n()
+  )
+
+#Nowe zmienne
+rev_normal <- stats_impact$avg_revenue[stats_impact$status == "Dzień Normalny"]
+rev_fail   <- stats_impact$avg_revenue[stats_impact$status == "Awaria (High/Crit)"]
+
+#Gdyby generator nie było awarii
+if(length(rev_fail) == 0) rev_fail <- rev_normal 
+
+#Obliczamy różnicę
+loss_value <- rev_normal - rev_fail
+loss_percent <- (loss_value / rev_normal) * 100
+
+#Tekst 
+if (loss_value > 0) {
+  impact_text <- paste0(
+    "negatywny wpływ na finanse. Średni dzienny przychód w dniach objętych awarią spada o ok. ", 
+    round(loss_percent, 1), "% (strata: ", 
+    format(round(loss_value, 0), big.mark=" "), " PLN dziennie)."
+  )
+} else {
+  impact_text <- "brak istotnego negatywnego wpływu."
+}
+
+#Wykres
+ggplot(df_analysis, aes(x = status, y = revenue, fill = status)) +
+  geom_boxplot(alpha = 0.8, outlier.colour = "red") +
+  stat_summary(fun = mean, geom = "point", shape = 23, size = 4, fill = "white") +
+  scale_fill_manual(values = c("Awaria (High/Crit)" = "#e74c3c", "Dzień Normalny" = "#2ecc71")) +
+  scale_y_continuous(labels = scales::number_format(big.mark = " ", suffix = " PLN")) +
+  labs(
+    title = "",
+    subtitle = "Porównanie przychodów w dni normalne vs dni z awariami",
+    x = "",
+    y = "Dzienny Przychód z Biletów"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+## Wnioski
+
+Analiza porównawcza dni z awariami i bez wykazuje, że występowanie poważnych (high/critical) awarii ma `r impact_text`
+
+Szczegółowe dane:
+* Średni przychód w dzień normalny: **`r format(round(rev_normal, 0), big.mark=" ")` PLN**
+* Średni przychód w dzień z awarią: **`r format(round(rev_fail, 0), big.mark=" ")` PLN**
+
+Wykres pudełkowy obrazuje rozkład danych. Biały romb na wykresie wskazuje wartość średnią. Jeśli box dla dni z awarią znajduje się niżej niż dla dni normalnych, potwierdza to hipotezę, że problemy techniczne bezpośrednio korelują ze spadkiem sprzedaży biletów. Natomiast może być tak, że korelacja taka nie będzie istnieć np. gdy dni z awariami przypadną w weekendy (co jest prawdopodobne bo użycie atrakcji jest większe przez większą liczbę gości), co skutkuje większymi średnimi zarobkami.
+
+
+
+# Trendy Czasowe: Czy firma rośnie?
+
+Analiza liczby obsłużonych klientów w podziale na miesiące działalności.
+
+```{r trend-analysis}
+query_trends <- "
+  SELECT 
+    DATE_FORMAT(visit_date, '%Y-%m-01') as month_start,
+    COUNT(*) as visitors
+  FROM guests_visit
+  GROUP BY month_start
+  ORDER BY month_start
+"
+df_trends <- dbGetQuery(con, query_trends)
+df_trends$month_start <- as.Date(df_trends$month_start)
+
+ggplot(df_trends, aes(x = month_start, y = visitors)) +
+  geom_line(color = "#3498db", size = 1.2) +
+  geom_point(color = "#2980b9", size = 3) +
+  scale_x_date(date_labels = "%b %Y", date_breaks = "1 month") +
+  labs(
+    title = "Liczba Gości w Czasie",
+    subtitle = "Trend miesięczny",
+    x = "Miesiąc",
+    y = "Liczba sprzedanych biletów"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+
+```{r trend-calculation, echo=FALSE}
+#Jak sie zmienia trend??
+#Dane
+df_trends$month_idx <- 1:nrow(df_trends)
+
+#Regresja liniowa
+#Wspólczynnik a
+model <- lm(visitors ~ month_idx, data = df_trends)
+slope <- coef(model)[2]
+
+#Najlepszy miesiąc
+best_month_row <- df_trends[which.max(df_trends$visitors), ]
+best_month_name <- format(best_month_row$month_start, "%B %Y")
+max_visitors <- best_month_row$visitors
+
+#Zautomatyzowanhy tekst
+if (slope > 10) {
+  #Trend wzrostowy
+  trend_verdict <- "**rośnie** (trend wzrostowy)"
+  trend_comment <- paste0(
+    "Analiza regresji liniowej wskazuje na systematyczny rozwój bazy klientów. ",
+    "Średnio z każdym miesiącem liczba odwiedzających zwiększa się o ok. ", round(slope, 0), " osób."
+  )
+} else if (slope < -10) {
+  #Trend spadkowy
+  trend_verdict <- "**maleje** (trend spadkowy)"
+  trend_comment <- paste0(
+    "Widzimy niepokojącą stratę klientów. Średnio z każdym miesiącem tracimy ok. ", abs(round(slope, 0)), " odwiedzających. ",
+    "Zaleca się zmianę strategii marketingowej."
+  )
+} else {
+  #Trend boczny czyli stabilny czy tam stały
+  trend_verdict <- "**jest stabilna**"
+  trend_comment <- "Liczba odwiedzających utrzymuje się na stałym poziomie, wykazując jedynie naturalne wahania sezonowe bez wyraźnej tendencji wzrostowej lub spadkowej."
+}
+```
+
+## Wnioski: Dynamika rozwoju firmy
+
+Analiza wykresu pozwala stwierdzić, że w badanym okresie firma `r trend_verdict`.
+
+`r trend_comment`
+
+Szczyt popularności parku przypadł na **`r best_month_name`**, kiedy to sprzedano rekordową liczbę **`r max_visitors`** biletów.
+
+
+
+
+# Ile Zarbia AiBtcQuantLandia ?
+
+```{r total-financial-analysis, message=FALSE, warning=FALSE}
+#Przychody z biletów miesięcznie
+q_rev_tickets <- "
+  SELECT 
+    DATE_FORMAT(visit_date, '%Y-%m-01') as month,
+    SUM(tt.price) as rev_tickets
+  FROM guests_visit gv
+  JOIN ticket_types tt ON gv.id_ticket_type = tt.id_ticket_type
+  GROUP BY month
+"
+df_rev_tickets <- dbGetQuery(con, q_rev_tickets)
+
+#Przychody z obiektów (facility_sales)
+q_rev_facilities <- "
+  SELECT 
+    DATE_FORMAT(sale_date, '%Y-%m-01') as month,
+    SUM(total_amount) as rev_facilities
+  FROM facility_sales
+  GROUP BY month
+"
+df_rev_facilities <- dbGetQuery(con, q_rev_facilities)
+
+#Wydatki obiektów (facility_expenses)
+q_cost_facilities <- "
+  SELECT 
+    DATE_FORMAT(expense_date, '%Y-%m-01') as month,
+    SUM(expense_cost) as cost_facilities
+  FROM facility_expenses
+  GROUP BY month
+"
+df_cost_facilities <- dbGetQuery(con, q_cost_facilities)
+
+#Wydatki na pracowników (employee_payments)
+q_cost_labor <- "
+  SELECT 
+    DATE_FORMAT(payment_date, '%Y-%m-01') as month,
+    SUM(sh.base_amount + COALESCE(ep.bonus, 0) - COALESCE(ep.deduction, 0)) as cost_labor
+  FROM employee_payments ep
+  JOIN salary_history sh ON ep.base_salary_id = sh.id_salary
+  GROUP BY month
+"
+df_cost_labor <- dbGetQuery(con, q_cost_labor)
+
+#Odszkodowania (compensation_paid) ale TYLKO NIEUBEZPIECZONE
+q_cost_comp <- "
+  SELECT 
+    DATE_FORMAT(payout_date, '%Y-%m-01') as month,
+    SUM(amount_paid) as cost_compensation
+  FROM compensation_paid
+  WHERE is_covered_by_insurance = 0
+  GROUP BY month
+"
+df_cost_comp <- dbGetQuery(con, q_cost_comp)
+
+#Koszty atrakcji (attraction_costs)
+q_cost_attr <- "
+  SELECT 
+    DATE_FORMAT(cost_date, '%Y-%m-01') as month,
+    SUM(amount) as cost_attractions
+  FROM attraction_costs
+  GROUP BY month
+"
+df_cost_attr <- dbGetQuery(con, q_cost_attr)
+
+#Łączenie wszystkich danych w jeden DataFrame
+financial_summary <- df_rev_tickets %>%
+  full_join(df_rev_facilities, by = "month") %>%
+  full_join(df_cost_facilities, by = "month") %>%
+  full_join(df_cost_labor, by = "month") %>%
+  full_join(df_cost_comp, by = "month") %>%
+  full_join(df_cost_attr, by = "month") %>%
+  mutate(
+    month = as.Date(month),
+    #Zastępowanie NA zerami
+    rev_tickets = replace_na(rev_tickets, 0),
+    rev_facilities = replace_na(rev_facilities, 0),
+    cost_facilities = replace_na(cost_facilities, 0),
+    cost_labor = replace_na(cost_labor, 0),
+    cost_compensation = replace_na(cost_compensation, 0),
+    cost_attractions = replace_na(cost_attractions, 0),
+    
+    #Agregacja
+    total_revenue = rev_tickets + rev_facilities,
+    total_cost = cost_facilities + cost_labor + cost_compensation + cost_attractions,
+    net_profit = total_revenue - total_cost
+  ) %>%
+  arrange(month)
+
+#Obliczenie średnich
+avg_monthly_profit <- mean(financial_summary$net_profit, na.rm = TRUE)
+total_profit_sum <- sum(financial_summary$net_profit, na.rm = TRUE)
+
+#Tekst do wniosków
+profit_text <- ifelse(avg_monthly_profit > 0, "zysku", "straty")
+```
+
+```{r financial-plot, echo=FALSE}
+#Dane
+fin_long <- financial_summary %>%
+  select(month, Przychody = total_revenue, Wydatki = total_cost, Zysk_Netto = net_profit) %>%
+  pivot_longer(cols = c("Przychody", "Wydatki", "Zysk_Netto"), names_to = "Kategoria", values_to = "Kwota")
+
+ggplot(fin_long, aes(x = month, y = Kwota, fill = Kategoria)) +
+  geom_col(data = subset(fin_long, Kategoria != "Zysk_Netto"), position = "dodge", alpha = 0.8) +
+  
+  geom_line(data = subset(fin_long, Kategoria == "Zysk_Netto"), 
+            mapping = aes(x = month, y = Kwota, color = "Zysk Netto"), 
+            size = 1.5, inherit.aes = FALSE, show.legend = TRUE) +
+            
+  geom_point(data = subset(fin_long, Kategoria == "Zysk_Netto"), 
+             mapping = aes(x = month, y = Kwota), 
+             size = 3, color="black", inherit.aes = FALSE) +
+             
+  scale_fill_manual(values = c("Przychody" = "#27ae60", "Wydatki" = "#c0392b")) +
+  scale_y_continuous(labels = scales::number_format(big.mark = " ", suffix = " PLN")) +
+  scale_x_date(date_labels = "%b %Y", date_breaks = "1 month") +
+  labs(
+    title = "Miesięczny Bilans Finansowy Parku",
+    subtitle = "Zestawienie przychodów, kosztów i wyniku netto",
+    x = "Miesiąc",
+    y = "Kwota (PLN)",
+    fill = "Przepływy",
+    color = "Wynik"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Podsumowanie Finansowe
+Średni miesięczny wynik finansowy parku wynosi: `r format(round(avg_monthly_profit, 2), big.mark=" ")` PLN.
+
+Biorąc pod uwagę cały analizowany okres, park wygenerował łącznie `r format(round(total_profit_sum, 2), big.mark=" ")` PLN `r profit_text`.
+
+Zauważyć można korelacje pomiędzy liczbą gości a zarobkami parku co jest zgodne z intuicją.
+
+
+
+
+# Analiza Bezpieczeństwa
+
+Analiza ryzyka na podstawie stosunku liczby wypadków do liczby przejazdów.
+
+```{r safety-analysis}
+#Dane o wypadkach
+query_safety <- "
+  SELECT 
+    a.att_name,
+    COUNT(acc.id_accident) as accident_count
+  FROM attractions a
+  LEFT JOIN accidents acc ON a.id_attraction = acc.id_attraction
+  GROUP BY a.att_name
+"
+df_accidents <- dbGetQuery(con, query_safety)
+
+#Łączenie z liczbą przejazdów
+df_safety <- df_accidents %>%
+  left_join(df_financials %>% select(att_name, visit_count), by = "att_name") %>%
+  mutate(
+    visit_count = replace_na(visit_count, 1), #Nie dzielmyy lepiej przez 0 
+    risk_rate = (accident_count / visit_count) * 1000 #Wypadki na 1000 przejazdów
+  ) %>%
+  filter(accident_count > 0) %>%
+  arrange(desc(risk_rate))
+
+#Wykres
+ggplot(df_safety[1:10, ], aes(x = reorder(att_name, risk_rate), y = risk_rate)) +
+  geom_col(fill = "#e67e22") +
+  coord_flip() +
+  labs(
+    title = "Najbardziej Ryzykowne Atrakcje",
+    subtitle = "Liczba wypadków na 1000 przejazdów",
+    x = "Atrakcja",
+    y = "Współczynnik Ryzyka"
+  ) +
+  theme_minimal()
+```
+
+## Wnioski dotyczące bezpieczeństwa
+Dla atrakcji o najwyższym współczynniku ryzyka **(`r df_safety$att_name[1]`)** zaleca się:
+
+1. Natychmiastowy przegląd techniczny.
+2. Zwiększenie składki ubezpieczeniowej dla biletów obejmujących tę atrakcję.
+3. Rozważenie tymczasowego wyłączenia z użytku.
+
+
+# Analiza Sprzedaży Biletów
+
+Sprawdzamy, które rodzaje biletów cieszą się największą popularnością wśród odwiedzających.
+
+```{r ticket-sales-analysis}
+#Dane o sprzedanych biletach
+query_tickets <- "
+  SELECT 
+    tt.ticket_type_name,
+    COUNT(*) as total_sold
+  FROM guests_visit gv
+  JOIN ticket_types tt ON gv.id_ticket_type = tt.id_ticket_type
+  GROUP BY tt.ticket_type_name
+"
+df_tickets <- dbGetQuery(con, query_tickets)
+
+#% i średnia dzienna
+#Pobieramy liczbę dni
+days_count <- dbGetQuery(con, "SELECT COUNT(DISTINCT DATE(visit_date)) FROM guests_visit")[[1]]
+
+df_tickets <- df_tickets %>%
+  mutate(
+    share = total_sold / sum(total_sold),
+    avg_daily = total_sold / days_count
+  ) %>%
+  arrange(desc(total_sold))
+
+#Wykres słupkowy
+ggplot(df_tickets, aes(x = reorder(ticket_type_name, total_sold), y = avg_daily)) +
+  geom_col(fill = "#3498db") +
+  geom_text(aes(label = sprintf("%.1f (%.1f%%)", avg_daily, share * 100)), 
+            hjust = -0.1, size = 3.5) +
+  coord_flip() +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.3))) + 
+  labs(
+    title = "Średnia dzienna sprzedaż biletów wg rodzaju",
+    subtitle = paste("Analiza na podstawie", sum(df_tickets$total_sold), "transakcji"),
+    x = "Rodzaj Biletu",
+    y = "Średnia liczba sprzedanych biletów dziennie"
+  ) +
+  theme_minimal()
+
+```
+
+## Wnioski: Struktura Sprzedaży i Preferencje Klientów
+
+```{r auto-ticket-logic, echo=FALSE}
+#Najczęściej kupowany bilet
+leader_name <- df_tickets$ticket_type_name[1]
+leader_share <- df_tickets$share[1] * 100
+
+#Opis
+if (leader_name == "Normal Ticket") {
+  desc_leader <- "Wskazuje to na dominację standardowych klientów dorosłych, dla których kluczowy jest stosunek ceny do jakości."
+} else if (leader_name == "Children Ticket") {
+  desc_leader <- "Oznacza to, że park w tym okresie przyciągnął głównie rodziny z dziećmi, co może wiązać się z sezonem wakacyjnym."
+} else if (grepl("VR", leader_name)) {
+  desc_leader <- "Jest to wynik zaskakujący, wskazujący na ogromny entuzjazm gości wobec nowych technologii."
+} else {
+  desc_leader <- "Rozkład sprzedaży wskazuje na nietypowe preferencje gości w analizowanym okresie."
+}
+
+txt_leader_conclusion <- paste0(
+  "Najczęściej wybieranym produktem jest **", leader_name, "**, który odpowiada za **",
+  sprintf("%.1f%%", leader_share), "** wszystkich transakcji. ", desc_leader
+)
+
+#Analiza VR (Czy technologia się przyjęła?)
+#Sumujemy udział wszystkich biletów mających "VR" w nazwie
+vr_share_total <- df_tickets %>%
+  filter(grepl("VR", ticket_type_name, ignore.case = TRUE)) %>%
+  summarise(sum_share = sum(share)) %>%
+  pull()
+
+if (length(vr_share_total) == 0) vr_share_total <- 0
+vr_share_total <- vr_share_total * 100
+
+if (vr_share_total > 15) {
+  txt_vr_verdict <- "Technologia VR cieszy się **dużym zainteresowaniem**. Wysoki udział biletów powiązanych z wirtualną rzeczywistością sugeruje, że jest to kluczowy kierunek rozwoju parku i warto inwestować w kolejne stanowiska."
+} else {
+  txt_vr_verdict <- "Technologia VR pozostaje **produktem niszowym**. Stosunkowo niski udział sprzedaży sugeruje, że goście nadal preferują tradycyjne, fizyczne atrakcje jak roller-coastery."
+}
+
+#Analiza VIP / Premium (Czy ludzie mają pieniądze?)
+vip_row <- df_tickets %>% filter(ticket_type_name == 'VIP ticket')
+vip_share <- if(nrow(vip_row) > 0) vip_row$share * 100 else 0
+
+if (vip_share > 8) {
+  txt_vip_verdict <- "Zauważalny sukces segmentu Premium. Klienci chętnie decydują się na najdroższe pakiety VIP, co oznacza wysokie zarobki odwiedzających."
+} else {
+  txt_vip_verdict <- "Segment Premium wymaga wsparcia marketingowego. Niski udział biletów VIP wskazuje na wysoką wrażliwość cenową klientów."
+}
+```
+
+
+Na podstawie szczegółowej analizy danych transakcyjnych sformułowano następujące spostrzeżenia dotyczące preferencji klientów:
+
+1.  **Produkt Wiodący:**
+    `r txt_leader_conclusion`
+
+2.  **Adopcja Technologii VR:**
+    `r txt_vr_verdict` Łączny udział biletów typu VR w wolumenie sprzedaży wyniósł **`r sprintf("%.1f%%", vr_share_total)`**.
+
+3.  **Segmentacja Klienta:**
+    `r txt_vip_verdict`
+
+
+
+# Czym najczęściej płacą goście w AiBtcQuantLandii
+
+Analiza metod płatności wykorzystywanych w punktach usługowych (restauracje, sklepy, bary) pozwala ocenić stopień cyfryzacji klientów parku oraz zaplanować infrastrukturę terminali płatniczych.
+
+```{r payments-analysis, message=FALSE, warning=FALSE}
+#Dane
+query_payments <- "
+  SELECT 
+    payment_method,
+    COUNT(*) as transaction_count,
+    SUM(total_amount) as total_value
+  FROM facility_sales
+  GROUP BY payment_method
+  ORDER BY total_value DESC
+"
+df_payments <- dbGetQuery(con, query_payments)
+
+#Udział w transakcjach
+total_revenue_facilities <- sum(df_payments$total_value)
+
+df_payments <- df_payments %>%
+  mutate(
+    share_val = (total_value / total_revenue_facilities) * 100,
+    method_type = case_when(
+      payment_method %in% c("BLIK", "Card") ~ "Cyfrowe",
+      payment_method == "Cash" ~ "Gotówka",
+      TRUE ~ "Inne (Gift Card)"
+    )
+  )
+
+#Zautomartyzowany tekst
+digital_share <- sum(df_payments$share_val[df_payments$method_type == "Cyfrowe"])
+cash_share <- sum(df_payments$share_val[df_payments$method_type == "Gotówka"])
+
+if (digital_share > 70) {
+  txt_pay_trend <- paste0(
+    "Park jest zdecydowanie **cyfrowy**. Aż **", round(digital_share, 1), "%** wartości transakcji odbywa się bezgotówkowo. ",
+    "Sugeruje to możliwość całkowitego wycofania gotówki w przyszłości, co obniży koszty posiadania pieniędzy."
+  )
+} else if (cash_share > 40) {
+  txt_pay_trend <- paste0(
+    "Gotówka wciąż odgrywa kluczową rolę (**", round(cash_share, 1), "%** obrotu). ",
+    "Całkowita rezygnacja z gotówki byłaby ryzykowna i mogłaby wykluczyć dużą grupę klientów."
+  )
+} else {
+  txt_pay_trend <- "Obserwujemy zrównoważony miks płatności. Klienci chętnie korzystają z obu form rozliczeń."
+}
+
+#Sprawdzenie popularności BLIKa 
+blik_row <- df_payments %>% filter(payment_method == "BLIK")
+blik_val <- if(nrow(blik_row) > 0) blik_row$share_val else 0
+
+txt_blik <- paste0("Warto odnotować udział systemu **BLIK**, który odpowiada za **", 
+                   round(blik_val, 1), "%** przychodów z usług dodatkowych.")
+```
+
+```{r paymentss-plot, fig.width=8, echo=FALSE}
+ggplot(df_payments, aes(x = reorder(payment_method, total_value), y = total_value, fill = method_type)) +
+  geom_col() +
+  coord_flip() + #Wykres poziomy dla czytelności 
+  geom_text(aes(label = sprintf("%.1f%%", share_val)), 
+            hjust = -0.1, size = 3.5, fontface = "bold") +
+  scale_y_continuous(labels = scales::number_format(big.mark = " ", suffix = " PLN"), 
+                     expand = expansion(mult = c(0, 0.15))) +
+  scale_fill_manual(values = c(
+    "Cyfrowe" = "#3498db",   
+    "Gotówka" = "#2ecc71",  
+    "Inne (Gift Card)" = "#95a5a6" 
+  )) +
+  labs(
+    title = "Metody Płatności wg Wartości Sprzedaży",
+    subtitle = "Jak goście płacą za jedzenie i pamiątki?",
+    x = "Metoda Płatności",
+    y = "Łączna wartość transakcji (PLN)",
+    fill = "Rodzaj płatności"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+## Wnioski Biznesowe
+Analiza danych transakcyjnych prowadzi do następujących obserwacji:
+
+1. Stopień Cyfryzacji: `r txt_pay_trend`
+
+2. Polskie Innowacje: `r txt_blik`
+
+3. Rekomendacja: W strefach o największym natężeniu ruchu (gastronomia) należy zapewnić szybkie terminale zbliżeniowe, aby skrócić czas obsługi, ponieważ dominują transakcje cyfrowe.
+
+# Zarobki Pracowników
+
+```{r salary-analysis, fig.width=22, fig.height=60, echo=FALSE, message=FALSE, warning=FALSE}
+#Dane
+query_salaries <- "
+  SELECT 
+    pos.position_name as position,
+    e.gender,
+    (sh.base_amount + COALESCE(ep.bonus, 0) - COALESCE(ep.deduction, 0)) as amount
+  FROM employees e
+  JOIN positions pos ON e.id_position = pos.id_position
+  JOIN employee_payments ep ON e.id_employee = ep.id_employee
+  JOIN salary_history sh ON ep.base_salary_id = sh.id_salary
+"
+df_salaries <- dbGetQuery(con, query_salaries)
+
+#Uporządkowanie danych
+df_salaries <- df_salaries %>%
+  mutate(gender = case_when(
+    tolower(gender) == "man" ~ "M",
+    tolower(gender) == "woman" ~ "F",
+    TRUE ~ "Other"
+  )) %>%
+  filter(gender %in% c("M", "F"))
+
+df_salaries$gender <- factor(df_salaries$gender, levels = c("M", "F"))
+
+
+#Wykres
+plot_salary <- ggplot(df_salaries, aes(x = gender, y = amount, fill = gender)) +
+  geom_boxplot(alpha = 0.7, outlier.shape = 16, outlier.size = 5) + 
+  
+  #Po 3 kolumny z facetwrap
+  facet_wrap(~ position, scales = "free_y", ncol = 3) + 
+  
+  scale_fill_manual(values = c("M" = "#3498db", "F" = "#e74c3c"), 
+                    labels = c("M" = "Mężczyźni", "F" = "Kobiety")) +
+  scale_y_continuous(labels = scales::number_format(suffix = " PLN", big.mark = " ")) +
+  labs(
+    title = "Struktura wynagrodzeń wg stanowiska i płci",
+    subtitle = "Rozkład kwot wypłat na poszczególnych stanowiskach",
+    x = "Płeć",
+    y = "Wypłata (PLN)",
+    fill = "Płeć"
+  ) +
+  
+  #Base size większy bo duzoooo wykresów
+  theme_minimal(base_size = 20) + 
+  
+  theme(
+    #Tytuły wykresów
+    strip.text = element_text(face = "bold", size = 20, margin = margin(b = 10)),
+    
+    #Legenda
+    legend.position = "top",
+    legend.key.size = unit(3, "cm"), 
+    legend.text = element_text(size = 20),
+    legend.title = element_text(size = 20, face = "bold"),
+    
+    #Tytuł główny
+    plot.title = element_text(size = 35, face = "bold", margin = margin(b = 20)),
+    plot.subtitle = element_text(size = 28, margin = margin(b = 30)),
+    
+    #Opisy osi X i Y
+    axis.title = element_text(size = 30),
+    axis.text = element_text(size = 30),
+    
+    #Odstępy między panelami
+    panel.spacing = unit(2, "lines")
+  )
+
+print(plot_salary)
+
+
+#Zautomatyzowany tekst
+salary_stats <- df_salaries %>%
+  group_by(position, gender) %>%
+  summarise(avg_wage = mean(amount, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = gender, values_from = avg_wage)
+
+if(!"M" %in% names(salary_stats)) salary_stats$M <- 0
+if(!"F" %in% names(salary_stats)) salary_stats$F <- 0
+
+salary_stats <- salary_stats %>%
+  mutate(
+    M = replace_na(M, 0),
+    F = replace_na(F, 0),
+    diff = M - F,
+    gap_percent = ifelse(M > 0, (diff / M) * 100, 0)
+  )
+
+best_paid_pos <- df_salaries %>%
+  group_by(position) %>%
+  summarise(avg = mean(amount, na.rm = TRUE)) %>%
+  arrange(desc(avg)) %>%
+  slice(1)
+  
+txt_highest_paid <- paste0("**", best_paid_pos$position, "** (średnio ", 
+                           format(round(best_paid_pos$avg, 0), big.mark=" "), " PLN)")
+
+max_gap_row <- salary_stats %>% 
+  filter(M > 0 & F > 0) %>% 
+  arrange(desc(abs(diff))) %>% 
+  slice(1)
+
+if (nrow(max_gap_row) == 0) {
+   txt_gap_verdict <- "Brak wystarczających danych porównawczych."
+} else if (max_gap_row$diff > 0) {
+  txt_gap_verdict <- paste0(
+    "Największą dysproporcję na korzyść mężczyzn odnotowano na stanowisku **", max_gap_row$position, 
+    "** (różnica ok. ", round(max_gap_row$gap_percent, 1), "%)."
+  )
+} else {
+  txt_gap_verdict <- paste0(
+    "Największą dysproporcję na korzyść kobiet odnotowano na stanowisku **", max_gap_row$position, 
+    "** (różnica ok. ", abs(round(max_gap_row$gap_percent, 1)), "%)."
+  )
+}
+```
+
+
+## Wnioski: Analiza Płac
+
+Powyższe zestawienie prezentuje rozkład wynagrodzeń w podziale na role w organizacji oraz płeć pracowników.
+
+1.  **Liderzy Płac:**
+    Najlepiej opłacanym stanowiskiem w parku jest `r txt_highest_paid`.
+
+2.  **Równość Wynagrodzeń:**
+    `r txt_gap_verdict` Wykresy pudełkowe pozwalają zauważyć, że na niektórych stanowiskach rozpiętość zarobków jest duża, co potwierdza różne premie (bonusy), podczas gdy na innych płace są ustandaryzowane.
+
+
+
+# Premie. Czyli czy warto pracować w AiBtcQuantLandii
+
+
+```{r salary-components-analysis, message=FALSE, warning=FALSE}
+#Dane
+query_components <- "
+  SELECT 
+    DATE_FORMAT(ep.payment_date, '%Y-%m-01') as month,
+    SUM(sh.base_amount) as total_base,
+    SUM(ep.bonus) as total_bonus,
+    SUM(ep.deduction) as total_deduction
+  FROM employee_payments ep
+  JOIN salary_history sh ON ep.base_salary_id = sh.id_salary
+  GROUP BY month
+  ORDER BY month
+"
+df_components <- dbGetQuery(con, query_components)
+
+#Przetwarzanie danych
+df_comp_long <- df_components %>%
+  mutate(
+    month = as.Date(month),
+    total_deduction = -total_deduction 
+  ) %>%
+  pivot_longer(
+    cols = c("total_bonus", "total_deduction"),
+    names_to = "component",
+    values_to = "amount"
+  ) %>%
+  mutate(
+    component = factor(component, 
+      levels = c("total_bonus", "total_deduction"),
+      labels = c("Bonusy", "Potrącenia")
+    )
+  )
+
+#Obliczenia do wniosków 
+avg_bonus_share <- sum(df_components$total_bonus) / sum(df_components$total_base) * 100
+avg_deduction_share <- sum(df_components$total_deduction) / sum(df_components$total_base) * 100
+
+txt_bonus_comment <- paste0(
+  "Średnio bonusy stanowią dodatkowe **", round(avg_bonus_share, 1), "%** wartości płacy bazowej."
+)
+```
+
+```{r bonus-plot, echo=FALSE}
+ggplot(df_comp_long, aes(x = month, y = amount, fill = component)) +
+  geom_col(width = 20, alpha = 0.9) + 
+  geom_hline(yintercept = 0, color = "black", size = 0.5) + 
+  scale_fill_manual(values = c(
+    "Bonusy" = "#2ecc71",        
+    "Potrącenia" = "#e74c3c"     
+  )) +
+  scale_y_continuous(labels = scales::number_format(big.mark = " ", suffix = " PLN")) +
+  scale_x_date(date_labels = "%b %Y", date_breaks = "1 month") +
+  labs(
+    title = "Zmienne Składniki Wynagrodzeń",
+    subtitle = "Zestawienie wypłaconych premii i naliczonych potrąceń",
+    x = "Miesiąc",
+    y = "Kwota (PLN)",
+    fill = "Rodzaj składnika"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "top"
+  )
+```
+
+
+## Wnioski
+Analiza struktury płac wykazuje następujące zależności:
+
+1. Bonusy: `r txt_bonus_comment` Są one widoczne jako zielony słupek.
+
+2. Potrącenia: Stanowią średnio **`r round(avg_deduction_share, 1)`%** płacy bazowej i są reprezentowane przez czerwone słupki poniżej osi. 
+
+Widzimy na podstawie wykresu, że bonusy stanowią większą część zmian w płacy, zatem śmiało możemy zatrudniać się w AiBtcQuantLandii.
+
+
+
+
+# Dla Kogo Jest Ten Park ?
+**Wpływ limitów wzrostu na popularność atrakcji**
+
+W tej sekcji sprawdzamy dostępność atrakcji dla gości o różnym wzroście i analizujemy, czy restrykcyjne limity ograniczają liczbę odwiedzających.
+
+```{r height-popularity-analysis, message=FALSE, warning=FALSE}
+#Dane
+query_height <- "
+  SELECT 
+    a.att_name,
+    COALESCE(a.height_limit_cm, 0) as height_limit,
+    COUNT(av.id_visit) as visit_count
+  FROM attractions a
+  LEFT JOIN attraction_visits av ON a.id_attraction = av.id_attraction
+  GROUP BY a.id_attraction, a.att_name, a.height_limit_cm
+  ORDER BY height_limit
+"
+df_height <- dbGetQuery(con, query_height)
+
+#Limity
+df_height <- df_height %>%
+  mutate(
+    limit_category = case_when(
+      height_limit == 0 ~ "Brak limitu (0 cm)",
+      height_limit < 120 ~ "Dla dzieci (<120 cm)",
+      height_limit < 140 ~ "Średni limit (120-139 cm)",
+      TRUE ~ "Wysoki limit (>=140 cm)"
+    ),
+    #Kolejność na wykresie
+    limit_category = factor(limit_category, levels = c(
+      "Brak limitu (0 cm)", 
+      "Dla dzieci (<120 cm)", 
+      "Średni limit (120-139 cm)", 
+      "Wysoki limit (>=140 cm)"
+    ))
+  )
+
+
+#Sprawdzamy wyższy limit = mniej ludzi?
+avg_visits_no_limit <- mean(df_height$visit_count[df_height$height_limit == 0], na.rm = TRUE)
+avg_visits_high_limit <- mean(df_height$visit_count[df_height$height_limit >= 140], na.rm = TRUE)
+
+diff_percent <- ((avg_visits_no_limit - avg_visits_high_limit) / avg_visits_no_limit) * 100
+
+if (diff_percent > 20) {
+  txt_height_conclusion <- paste0(
+    "Istnieje wyraźna bariera wejścia. Atrakcje bez limitu wzrostu są średnio o **", 
+    round(diff_percent, 0), "%** bardziej popularne niż te ekstremalne (limit >= 140 cm). ",
+    "Sugeruje to, że dużą część gości stanowią rodziny z dziećmi, które nie mogą korzystać z najbardziej ekstremalnych kolejek."
+  )
+} else if (diff_percent < -20) {
+  txt_height_conclusion <- paste0(
+    "Zaskakujący trend: Atrakcje ekstremalne (limit >= 140 cm) cieszą się o **", 
+    abs(round(diff_percent, 0)), "%** większą popularnością niż te dostępne dla wszystkich. ",
+    "Wskazuje to, że park przyciąga głównie dorosłych poszukiwaczy adrenaliny."
+  )
+} else {
+  txt_height_conclusion <- "Nie obserwujemy drastycznego wpływu limitu wzrostu na popularność. Zarówno atrakcje rodzinne, jak i ekstremalne cieszą się zbliżonym zainteresowaniem."
+}
+```
+
+```{r attractions-plot, fig.width=8, echo=FALSE}
+ggplot(df_height, aes(x = reorder(att_name, height_limit), y = visit_count, fill = limit_category)) +
+  geom_col() +
+  coord_flip() +
+  scale_fill_manual(values = c(
+    "Brak limitu (0 cm)" = "#2ecc71",      
+    "Dla dzieci (<120 cm)" = "#f1c40f",     
+    "Średni limit (120-139 cm)" = "#e67e22",
+    "Wysoki limit (>=140 cm)" = "#c0392b"   
+  )) +
+  labs(
+    title = "Popularność Atrakcji w zależności od Limitu Wzrostu",
+    subtitle = "Czy duży limit zabiera klientów?",
+    x = "Atrakcja",
+    y = "Liczba odwiedzin",
+    fill = "Limit"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+## Wnioski
+Analiza danych pozwala stwierdzić, że:
+
+1. Struktura Ograniczeń: Wykres wyraźnie dzieli atrakcje na strefy dostępności. Atrakcje oznaczone kolorem zielonym są dostępne dla każdego, podczas gdy czerwone wymagają odpowiedniego wzrostu (zazwyczaj >= 140 cm).
+
+2. Wpływ na Frekwencję: `r txt_height_conclusion`
+
+
+***Widzimy zatem, że AiBtcQuantLandia jest dla każdego. ZAPRASZAMY!!!***
+```{r cleanup}
+#Zamykamy połączenie
+dbDisconnect(con)
+```
