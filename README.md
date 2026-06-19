@@ -3,24 +3,6 @@
 
 Creating and exploring a database of a fictional entertainment park. This project aims to simulate a realistic database for an amusement park, complete with various types of data like personal information, event logs, and operational details. It's an excellent resource for testing applications, practicing SQL queries, or conducting data analysis on a generated dataset.
 
-## Table of Contents
-
-* [Project Title & Description](https://www.google.com/search?q=%23project-title--description)
-* [Key Features & Benefits](https://www.google.com/search?q=%23key-features--benefits)
-* [Project Structure](https://www.google.com/search?q=%23project-structure)
-* [Technologies Used](https://www.google.com/search?q=%23technologies-used)
-* [Prerequisites & Dependencies](https://www.google.com/search?q=%23prerequisites--dependencies)
-* [Installation & Setup Instructions](https://www.google.com/search?q=%23installation--setup-instructions)
-* [1. Clone the Repository](https://www.google.com/search?q=%231-clone-the-repository)
-* [2. Set Up Python Environment](https://www.google.com/search?q=%232-set-up-python-environment)
-* [3. Database Setup](https://www.google.com/search?q=%233-database-setup)
-* [4. Initialize Database Schema](https://www.google.com/search?q=%234-initialize-database-schema)
-* [5. Generate Initial Data](https://www.google.com/search?q=%235-generate-initial-data)
-
-
-* [Usage Examples](https://www.google.com/search?q=%23usage-examples)
-* [Configuration Options](https://www.google.com/search?q=%23configuration-options)
-
 ---
 
 ## Key Features & Benefits
@@ -47,8 +29,7 @@ The repository is organized as follows:
 
 ```
 ├── .env                              # Environment variables (e.g., database credentials)
-├── .gitignore                        # Files/directories to ignore in Git
-├── README.md                         # Project documentation
+├── README.md                       
 ├── Raport_Analiza_Quant.Rmd          # R Markdown for quantitative analysis
 ├── data/                             # Contains data-related files
 │   ├── generate_data/                # Python scripts for probabilistic data generation logic
