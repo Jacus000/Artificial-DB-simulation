@@ -25,7 +25,7 @@ Creating and exploring a database of a fictional entertainment park. This projec
 
 ## Key Features & Benefits
 
-This project offers a robust framework for generating and exploring a simulated entertainment park database, focusing heavily on realistic, statistically sound data generation.
+This project offers a framework for generating and exploring a simulated entertainment park database, focusing heavily on realistic, statistically sound data generation.
 
 ### Key Features:
 
@@ -65,14 +65,17 @@ The repository is organized as follows:
 │           ├── clean_db.sql          # Script to clean dynamic data
 │           ├── drop_db.sql           # Script to drop database tables
 │           └── static/               
-│               └── 00_fill_sectors.sql 
+│               └── 00_fill_sectors.sql
+|                 ... 
 ├── scripts/                          # Bash scripts for setup
-│   └── init_db.sh                    # Database initialization script
+│   └── init_db.sh
+|          ...                    # Database initialization script
 └── python/                           # Core Python application logic
     ├── db/                           # Database interaction modules
     │   └── fetch_from_db.py          
     ├── generate/                     # Core data generation modules
-    │   └── generate_accidents.py     
+    │   └── generate_accidents.py
+    |      ...    
     ├── generation_orchestrator.py    # Orchestrates the interconnected data generation process
     └── main.py                       # Main script to run the data simulation
 
@@ -141,7 +144,7 @@ pip install -r requirements.txt
 
 ### 3. Database Setup
 
-Create a `.env` file in the root directory of the project and populate it with your MariaDB connection details:
+Create a `.env` file in the root directory of the project and populate it with your MariaDB (or a database of your choice) connection details:
 
 ```dotenv
 USER=your_mariadb_user
@@ -205,8 +208,17 @@ The primary connection configuration is handled via the `.env` file.
 
 The generation scripts allow you to fine-tune the distributions and scale of the simulated park. These parameters control the density and frequency of events, respecting the underlying statistical dependencies:
 
-* **`number_of_guests`**: Adjusts the total footprint of park visitors, cascading into ticket sales, queue times, and crowd density metrics.
-* **`probability_of_accidents`**: Modifies the baseline statistical chance of incidents occurring, which dynamically interacts with weather conditions and specific park sectors.
-* **`breakdown_rate`**: Configures how often machinery and attractions suffer from technical failures, generating realistic maintenance logs and downtime periods.
+```python
+DB_CONFIG = {
+    "employees_count": 150,                     # Total number of employees in the park
+    "guest_count": 15000,                       # Total number of guests visiting within the simulation window
+    "max_number_of_rides_per_entry": 6,         # Max rides a single guest will go on (Min: 3). 
+                                                # Warning: higher values can drastically inflate simulated wait times!
+    "todays_date": datetime.now(timezone.utc),  # Simulation end date
+    "starting_date": datetime(2024, 1, 12, tzinfo=timezone.utc), # Simulation start date
+    "intensity": 0.8,                           # Expenses/sales intensity multiplier for commercial facilities
+    "probability_of_accidents": 0.001           # Baseline probability of accidents (0.001 = very rare)
+}
+```
 
-These parameters can be configured directly within the core generation modules (e.g., `python/generate/`) or orchestrated via arguments in `main.py`.
+These parameters can be configured directly within the core generation module `python/generate/generator_orchestrator`.
