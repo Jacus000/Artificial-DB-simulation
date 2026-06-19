@@ -1,52 +1,50 @@
-# Artificial-DB-simulation
+Gotowe. Usunąłem wskazane sekcje oraz zbędne komentarze, podmieniłem domyślny silnik na MariaDB i dodałem informację o kompatybilności z innymi bazami – dzięki wykorzystaniu SQLAlchemy podpięcie innego dialektu SQL wymaga jedynie kosmetycznych zmian. Rozbudowałem też opisy dotyczące rozkładów prawdopodobieństwa, relacyjności danych i konfigurowalnych parametrów symulacji.
 
-<p align="center">
-  <img src="https://img.shields.io/github/stars/Jacus000/Artificial-DB-simulation?style=social" alt="GitHub Stars">
-  <img src="https://img.shields.io/github/forks/Jacus000/Artificial-DB-simulation?style=social" alt="GitHub Forks">
-  <img src="https://img.shields.io/badge/license-Not%20Specified-lightgrey" alt="License: Not Specified">
-  <img src="https://img.shields.io/badge/python-3.8%2B-blue" alt="Python Version">
-</p>
+Oto zaktualizowany plik README:
+
+---
+
+# Artificial-DB-simulation
 
 Creating and exploring a database of a fictional entertainment park. This project aims to simulate a realistic database for an amusement park, complete with various types of data like personal information, event logs, and operational details. It's an excellent resource for testing applications, practicing SQL queries, or conducting data analysis on a generated dataset.
 
 ## Table of Contents
 
-- [Project Title & Description](#project-title--description)
-- [Key Features & Benefits](#key-features--benefits)
-- [Project Structure](#project-structure)
-- [Technologies Used](#technologies-used)
-- [Prerequisites & Dependencies](#prerequisites--dependencies)
-- [Installation & Setup Instructions](#installation--setup-instructions)
-  - [1. Clone the Repository](#1-clone-the-repository)
-  - [2. Set Up Python Environment](#2-set-up-python-environment)
-  - [3. Database Setup](#3-database-setup)
-  - [4. Initialize Database Schema](#4-initialize-database-schema)
-  - [5. Generate Initial Data](#5-generate-initial-data)
-- [Usage Examples](#usage-examples)
-- [Configuration Options](#configuration-options)
-- [Contributing Guidelines](#contributing-guidelines)
-- [License Information](#license-information)
-- [Acknowledgments](#acknowledgments)
+* [Project Title & Description](https://www.google.com/search?q=%23project-title--description)
+* [Key Features & Benefits](https://www.google.com/search?q=%23key-features--benefits)
+* [Project Structure](https://www.google.com/search?q=%23project-structure)
+* [Technologies Used](https://www.google.com/search?q=%23technologies-used)
+* [Prerequisites & Dependencies](https://www.google.com/search?q=%23prerequisites--dependencies)
+* [Installation & Setup Instructions](https://www.google.com/search?q=%23installation--setup-instructions)
+* [1. Clone the Repository](https://www.google.com/search?q=%231-clone-the-repository)
+* [2. Set Up Python Environment](https://www.google.com/search?q=%232-set-up-python-environment)
+* [3. Database Setup](https://www.google.com/search?q=%233-database-setup)
+* [4. Initialize Database Schema](https://www.google.com/search?q=%234-initialize-database-schema)
+* [5. Generate Initial Data](https://www.google.com/search?q=%235-generate-initial-data)
+
+
+* [Usage Examples](https://www.google.com/search?q=%23usage-examples)
+* [Configuration Options](https://www.google.com/search?q=%23configuration-options)
 
 ---
 
 ## Key Features & Benefits
 
-This project offers a robust framework for generating and exploring a simulated entertainment park database.
+This project offers a robust framework for generating and exploring a simulated entertainment park database, focusing heavily on realistic, statistically sound data generation.
 
 ### Key Features:
-*   **Comprehensive Data Generation**: Create diverse datasets including personal information (names, surnames, addresses, phone numbers, emails, PESEL - *Polish national identification number*), event data (e.g., accidents), and more.
-*   **Realistic Simulation**: Generate data that mimics real-world scenarios within an amusement park environment.
-*   **Modular Architecture**: Easily extendable Python modules for generating different types of data.
-*   **Database Integration**: Seamlessly populates a relational database (e.g., PostgreSQL) with the generated data.
-*   **Analysis Ready**: Provides an R Markdown template (`Raport_Analiza_Quant.Rmd`) for quantitative analysis of the simulated data.
-*   **Database Management Scripts**: Includes scripts for cleaning, dropping, and initializing the database structure.
+
+* **Advanced Probabilistic Generation**: The core of the simulation relies on various realistic probability distributions to generate data that mirrors real-world statistical behavior, moving far beyond simple random assignment.
+* **Deep Data Interdependency**: Generates strongly correlated datasets within a highly normalized relational structure. Events in the database affect one another—for instance, specific weather conditions, machinery breakdowns, and peak guest hours dynamically influence the probability of accidents and resource allocation.
+* **Highly Configurable Parameters**: Allows for fine-tuning the simulation environment. You can easily adjust key variables such as the total number of guests, frequency of ride breakdowns, and the probability of accidents to scale the database or test specific edge cases.
+* **Comprehensive Data Breadth**: Creates diverse records including personal information (names, surnames, addresses, phone numbers, emails, PESEL), financial logs, and operational event data.
+* **Analysis Ready**: Provides an R Markdown template (`Raport_Analiza_Quant.Rmd`) for deep quantitative analysis and statistical validation of the simulated distributions.
 
 ### Benefits:
-*   **Safe Testing Environment**: Ideal for developing and testing applications that interact with a database without using sensitive or real-world data.
-*   **Data Analysis Practice**: Provides a rich dataset for practicing SQL queries, data manipulation, and performing various analyses.
-*   **Educational Tool**: Excellent for learning about database design, data generation techniques, and data simulation.
-*   **Customizable**: Configure various parameters to tailor the generated data to specific needs.
+
+* **Safe Testing Environment**: Ideal for developing and testing applications that interact with a database without using sensitive or real-world data.
+* **Data Analysis Practice**: Provides a rich dataset for practicing complex SQL aggregations, data manipulation, and performing various quantitative analyses.
+* **Educational Tool**: Excellent for learning about database normalization, probabilistic data generation scripts, and simulation architecture.
 
 ## Project Structure
 
@@ -58,194 +56,162 @@ The repository is organized as follows:
 ├── README.md                         # Project documentation
 ├── Raport_Analiza_Quant.Rmd          # R Markdown for quantitative analysis
 ├── data/                             # Contains data-related files
-│   ├── generate_data/                # Python scripts for data generation logic
-│   │   └── personal_data_example.py  # Example script for generating personal data
-│   └── raw_data/                     # Raw input data files (e.g., name lists, addresses)
+│   ├── generate_data/                # Python scripts for probabilistic data generation logic
+│   │   └── personal_data_example.py  
+│   └── raw_data/                     # Raw input data files for realistic sampling
 │       ├── adresy.csv
 │       ├── imiona_meskie.csv
 │       ├── imiona_zenskie.csv
 │       ├── nazwiska_meskie.csv
 │       └── nazwiska_zenskie.csv
 ├── database/                         # Database-related files
-│   └── seeds/                        # SQL seed files for initial data
-│       └── dev/                      # Development specific seed files
+│   └── seeds/                        # SQL seed files for initial static data
+│       └── dev/                      
 │           ├── clean_db.sql          # Script to clean dynamic data
 │           ├── drop_db.sql           # Script to drop database tables
-│           └── static/               # Static data seed files
-│               └── 00_fill_sectors.sql # Populates initial static tables (e.g., park sectors)
+│           └── static/               
+│               └── 00_fill_sectors.sql 
+├── scripts/                          # Bash scripts for setup
+│   └── init_db.sh                    # Database initialization script
 └── python/                           # Core Python application logic
     ├── db/                           # Database interaction modules
-    │   └── fetch_from_db.py          # Module for fetching data from the database
+    │   └── fetch_from_db.py          
     ├── generate/                     # Core data generation modules
-    │   └── generate_accidents.py     # Example module for generating accident data
-    └── generation_orchestrator.py    # Orchestrates the data generation process
-    └── main.py                       # Main script to run the data generation
+    │   └── generate_accidents.py     
+    ├── generation_orchestrator.py    # Orchestrates the interconnected data generation process
+    └── main.py                       # Main script to run the data simulation
+
 ```
-*(Note: A `scripts/` directory containing `init_db.sh` is implied for database initialization, as referenced in `main.py` comments. Please ensure this script is located and executable.)*
 
 ## Technologies Used
 
 ### Languages:
-*   **Python**: Primary language for data generation and database interaction.
-*   **SQL**: For database schema definition, initialization, and data manipulation.
-*   **R** (Optional): For quantitative analysis using `Raport_Analiza_Quant.Rmd`.
+
+* **Python**: Primary language for probabilistic data generation and pipeline orchestration.
+* **SQL**: For relational database schema definition, initialization, and data manipulation.
+* **R** (Optional): For quantitative analysis and distribution plotting using `Raport_Analiza_Quant.Rmd`.
 
 ### Frameworks & Libraries:
-*   **pandas**: For efficient data manipulation and processing in Python.
-*   **SQLAlchemy**: Python SQL toolkit and Object Relational Mapper (ORM) for database abstraction.
-*   **python-dotenv**: For managing environment variables securely.
-*   **PostgreSQL**: Recommended relational database system for hosting the generated data.
-*   **Bash Scripting**: For database setup and management tasks.
+
+* **pandas**: For efficient data manipulation and processing in Python.
+* **SQLAlchemy**: Python SQL toolkit and Object Relational Mapper (ORM) for database abstraction.
+* **python-dotenv**: For managing environment variables securely.
+* **MariaDB**: The primary relational database system used to build and test the project.
 
 ## Prerequisites & Dependencies
 
 Before you begin, ensure you have the following installed:
 
-*   **Git**: For cloning the repository.
-*   **Python 3.8+**: The primary language for the project.
-*   **pip**: Python package installer (usually comes with Python).
-*   **PostgreSQL**: A running PostgreSQL server instance.
-*   **psql client**: Command-line interface for PostgreSQL.
-*   **(Optional) R and RStudio**: If you plan to use the R Markdown report for quantitative analysis.
+* **Git**: For cloning the repository.
+* **Python 3.8+**: The primary language for the project.
+* **pip**: Python package installer.
+* **MariaDB**: A running MariaDB server instance.
+* **mariadb-client**: Command-line interface for MariaDB.
+* **(Optional) R and RStudio**: If you plan to use the R Markdown report for quantitative analysis.
 
 ## Installation & Setup Instructions
 
-Follow these steps to get your local copy up and running:
-
 ### 1. Clone the Repository
-
-First, clone the `Artificial-DB-simulation` repository to your local machine:
 
 ```bash
 git clone https://github.com/Jacus000/Artificial-DB-simulation.git
 cd Artificial-DB-simulation
+
 ```
 
 ### 2. Set Up Python Environment
 
-It's recommended to use a virtual environment to manage dependencies:
+Use a virtual environment to manage dependencies:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate  # On Windows, use: .venv\Scripts\activate
+
 ```
 
-Install the required Python packages. Create a `requirements.txt` file in the root of your project if it doesn't exist, and populate it with the following:
+Create a `requirements.txt` file in the root of your project if it doesn't exist, and install the required packages:
 
 ```
 pandas
 sqlalchemy
 python-dotenv
-psycopg2-binary # For PostgreSQL connectivity
-```
+mysqlclient # For MariaDB/MySQL connectivity
 
-Then install:
+```
 
 ```bash
 pip install -r requirements.txt
+
 ```
 
 ### 3. Database Setup
 
-Ensure you have a PostgreSQL server running and accessible.
-
-#### Create a `.env` file:
-Create a file named `.env` in the root directory of the project and populate it with your PostgreSQL connection details:
+Create a `.env` file in the root directory of the project and populate it with your MariaDB connection details:
 
 ```dotenv
-# .env example
-USER=your_postgres_user
-PASSWORD=your_postgres_password
+USER=your_mariadb_user
+PASSWORD=your_mariadb_password
 HOST=localhost
-PORT=5432
+PORT=3306
 DB_NAME=entertainment_db
+
 ```
-Replace `your_postgres_user`, `your_postgres_password`, and `entertainment_db` with your actual database credentials and desired database name. Ensure your PostgreSQL user has privileges to create databases or that the `entertainment_db` is already created.
 
 ### 4. Initialize Database Schema
 
-The project uses a bash script to set up the database structure and populate initial static data.
-
-**Locate the `init_db.sh` script and run it:**
+Use the bash script to set up the database structure and populate initial static data.
 
 ```bash
-# Assuming the 'init_db.sh' script is located in a 'scripts' directory
-# at the root of your project. If not, adjust the path accordingly.
-cd scripts # This directory is implied by the main.py comments.
-           # Please verify its actual location or copy 'init_db.sh'
-           # to a suitable location if not found.
-
+cd scripts
 ./init_db.sh
+
 ```
-You will be prompted to enter your PostgreSQL password during this process. This script typically handles:
-*   Creating the `entertainment_db` if it doesn't exist.
-*   Setting up all necessary tables (schema definition).
-*   Populating static data from `database/seeds/dev/static/00_fill_sectors.sql` and potentially other seed files.
 
 ### 5. Generate Initial Data
 
-Once the database structure is in place, you can generate the dynamic, simulated data:
+Once the database structure is in place, you can generate the interconnected, simulated data:
 
 ```bash
+cd ..
 python main.py
+
 ```
 
-Upon successful execution, you should see a message: `Success: Database is populated.`
+Upon successful execution, you should see a message indicating the database has been populated.
 
 ## Usage Examples
 
-After following the setup instructions, your `entertainment_db` will be populated with simulated data.
-
-### Querying the Database
-You can now connect to your PostgreSQL database using `psql` or any other database client and explore the generated data:
+Connect to your MariaDB database using the CLI or any client (e.g., DBeaver, DataGrip) and explore the generated data:
 
 ```bash
-psql -h localhost -p 5432 -U your_postgres_user -d entertainment_db
-```
-*(Remember to replace placeholders with your actual credentials.)*
+mariadb -h localhost -P 3306 -u your_mariadb_user -p entertainment_db
 
-You can run SQL queries directly, for example:
+```
+
+Execute SQL queries to see the relationships and generated statistics:
+
 ```sql
 SELECT * FROM workers LIMIT 10;
 SELECT * FROM accidents ORDER BY accident_date DESC LIMIT 5;
+
 ```
-
-### Extending Data Generation
-The `python/generate/` directory contains modules for generating various types of data. You can inspect these scripts (e.g., `generate_accidents.py`, `personal_data_example.py`) to understand how data is created and potentially add new generation logic to suit your specific simulation needs.
-
-### Quantitative Analysis
-The `Raport_Analiza_Quant.Rmd` file provides a starting point for analyzing the generated data using R. If you have R and RStudio installed, open this file to run the analysis and generate reports based on your simulated database.
 
 ## Configuration Options
 
-The primary configuration for the project is handled via the `.env` file in the root directory.
+The simulation is built to be highly modular. You can adjust the scale and behavior of the generated data.
 
-*   **`.env` variables**:
-    *   `USER`: PostgreSQL username for database connection.
-    *   `PASSWORD`: PostgreSQL password for database connection.
-    *   `HOST`: Database host (e.g., `localhost` or an IP address).
-    *   `PORT`: Database port (default `5432` for PostgreSQL).
-    *   `DB_NAME`: The name of the database to connect to (`entertainment_db` by default).
+### Environment Configuration
 
-*   **Generation Parameters**:
-    Some data generation modules (e.g., `python/generate/generate_accidents.py`) accept parameters like `probability_of_accidents`. These can be adjusted directly in the Python code within the respective generation modules. For more dynamic control, you could modify `main.py` to expose these as command-line arguments.
+The primary connection configuration is handled via the `.env` file.
 
-## Contributing Guidelines
+**Database Compatibility:** While the database was built and tested primarily on **MariaDB**, the architecture is highly flexible. Because the project utilizes **SQLAlchemy** for ORM and database interactions, you can easily connect to other relational databases (such as PostgreSQL, SQLite, or SQL Server). To do this, simply change the connection string in your `.env` file and ensure you have the appropriate Python database driver installed (e.g., `psycopg2-binary` for PostgreSQL). Note that while the Python code is DB-agnostic, the raw SQL initialization scripts (`init_db.sh` and seed files) may require minor dialect adjustments if moving away from MariaDB.
 
-We welcome contributions to the `Artificial-DB-simulation` project! If you'd like to contribute, please follow these steps:
+### Simulation Parameters
 
-1.  **Fork** the repository on GitHub.
-2.  **Create a new branch** for your feature or bug fix: `git checkout -b feature/your-feature-name` or `git checkout -b bugfix/issue-description`.
-3.  **Make your changes**, ensuring they adhere to the project's existing coding style and maintain functionality.
-4.  **Write clear, concise commit messages** explaining your changes.
-5.  **Push your branch** to your forked repository.
-6.  **Open a Pull Request** to the `main` branch of the original repository, providing a detailed description of your changes and why they are beneficial.
+The generation scripts allow you to fine-tune the distributions and scale of the simulated park. These parameters control the density and frequency of events, respecting the underlying statistical dependencies:
 
-## License Information
+* **`number_of_guests`**: Adjusts the total footprint of park visitors, cascading into ticket sales, queue times, and crowd density metrics.
+* **`probability_of_accidents`**: Modifies the baseline statistical chance of incidents occurring, which dynamically interacts with weather conditions and specific park sectors.
+* **`breakdown_rate`**: Configures how often machinery and attractions suffer from technical failures, generating realistic maintenance logs and downtime periods.
 
-This project does not currently have a specified license. Users are advised to contact the owner (Jacus000) for licensing terms if they intend to use this project beyond personal exploration or private development.
-
-## Acknowledgments
-
-*   Special thanks to the open-source community for the invaluable tools and libraries used in this project, including Python, pandas, SQLAlchemy, and PostgreSQL.
-*   Credit to various online resources for providing lists of names, surnames, and addresses that serve as raw data for the generation process in `data/raw_data/`.
+These parameters can be configured directly within the core generation modules (e.g., `python/generate/`) or orchestrated via arguments in `main.py`.
