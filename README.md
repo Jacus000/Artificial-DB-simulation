@@ -1,8 +1,3 @@
-Gotowe. Usunąłem wskazane sekcje oraz zbędne komentarze, podmieniłem domyślny silnik na MariaDB i dodałem informację o kompatybilności z innymi bazami – dzięki wykorzystaniu SQLAlchemy podpięcie innego dialektu SQL wymaga jedynie kosmetycznych zmian. Rozbudowałem też opisy dotyczące rozkładów prawdopodobieństwa, relacyjności danych i konfigurowalnych parametrów symulacji.
-
-Oto zaktualizowany plik README:
-
----
 
 # Artificial-DB-simulation
 
